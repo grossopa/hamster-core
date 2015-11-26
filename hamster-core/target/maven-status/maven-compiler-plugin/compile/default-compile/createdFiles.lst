@@ -1,0 +1,14 @@
+org/hamster/core/util/EntityUtils.class
+org/hamster/core/dao/repository/impl/ManageableEntityRepositoryImpl.class
+org/hamster/core/dao/consts/EntityConsts.class
+org/hamster/core/dao/entity/base/StatusEntity.class
+org/hamster/core/dao/entity/base/ManageableEntity.class
+org/hamster/core/util/comparator/OrderEntityComparator.class
+org/hamster/core/util/comparator/IdEntityComparator.class
+org/hamster/core/dao/repository/ManageableEntityRepository.class
+org/hamster/core/dao/entity/base/IdEntity.class
+org/hamster/core/dao/consts/StatusEntityType.class
+org/hamster/core/dao/entity/base/OrderEntity.class
+org/hamster/core/util/comparator/ComparatorUtils.class
+org/hamster/core/dao/repository/CriteriaQueryFactory.class
+org/hamster/core/dao/entity/RefDataEntity.class
