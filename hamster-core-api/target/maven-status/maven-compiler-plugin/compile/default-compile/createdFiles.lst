@@ -1,8 +1,0 @@
-org/hamster/core/api/config/AppConfig.class
-org/hamster/core/api/model/mapper/AbstractDtoMapper.class
-org/hamster/core/api/model/base/IdIfc.class
-org/hamster/core/api/model/base/StatusIfc.class
-org/hamster/core/api/model/base/OrderIfc.class
-org/hamster/core/api/model/RefData.class
-org/hamster/core/api/model/mapper/DtoMapper.class
-org/hamster/core/api/model/base/ManageableIfc.class
