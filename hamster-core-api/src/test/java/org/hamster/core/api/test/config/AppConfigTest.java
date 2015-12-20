@@ -1,6 +1,6 @@
 package org.hamster.core.api.test.config;
 
-import org.hamster.core.api.config.AppConfig;
+import org.hamster.core.api.config.AbstractAppConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class AppConfigTest {
     
     @Autowired
-    private AppConfig appConfig;
+    private AbstractAppConfig appConfig;
     
     @Test
     public void verifyInjection() {

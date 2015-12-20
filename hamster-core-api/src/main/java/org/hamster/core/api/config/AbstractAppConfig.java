@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0
  */
 @Configuration
-public class AppConfig {
+public class AbstractAppConfig {
+    
     private @Value("${app.version}") String version;
 
     /**

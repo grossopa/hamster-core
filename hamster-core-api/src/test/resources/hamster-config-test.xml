@@ -12,5 +12,5 @@
 
   <util:properties id="applicationProperties" location="classpath:/hamster/config/application.properties" />
 
-  <bean id="appConfig" class="org.hamster.core.api.config.AppConfig"></bean>
+  <bean id="appConfig" class="org.hamster.core.api.config.AbstractAppConfig"></bean>
 </beans>
