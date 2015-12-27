@@ -20,7 +20,7 @@ import org.hamster.core.api.model.base.IdIfc;
 public abstract class IdEntity implements IdIfc<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /*

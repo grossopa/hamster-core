@@ -1,6 +1,7 @@
 package org.hamster.core.api.test.config;
 
 import org.hamster.core.api.config.AbstractAppConfig;
+import org.hamster.core.api.environment.initializer.UnknownEnvironmentContextInitializer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,16 +15,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @version 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/hamster-config-test.xml"})
+@ContextConfiguration(locations = { "classpath:/hamster-config-test.xml" }, initializers = UnknownEnvironmentContextInitializer.class)
 public class AppConfigTest {
-    
+
     @Autowired
     private AbstractAppConfig appConfig;
-    
+
     @Test
     public void verifyInjection() {
         Assert.assertNotNull(appConfig);
         Assert.assertNotNull(appConfig.getVersion());
-    } 
-    
+        Assert.assertEquals("Unknown", appConfig.getEnvironment());
+    }
+
 }

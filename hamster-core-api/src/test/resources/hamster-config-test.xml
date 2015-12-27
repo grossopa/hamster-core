@@ -10,7 +10,14 @@
 
   <description>Hamster Test Configuration</description>
 
-  <util:properties id="applicationProperties" location="classpath:/hamster/config/application.properties" />
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:hamster/config/application.properties</value>
+        <value>classpath:hamster/config/${spring.profiles.active}/application.${spring.profiles.active}.properties</value>
+      </list>
+    </property>
+  </bean>
 
   <bean id="appConfig" class="org.hamster.core.api.config.AbstractAppConfig"></bean>
 </beans>

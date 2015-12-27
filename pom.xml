@@ -28,9 +28,10 @@
 
     <!-- Data Accessing -->
     <spring-data-jpa.version>1.9.1.RELEASE</spring-data-jpa.version>
-    
+
     <!-- javax -->
     <jta.version>1.1</jta.version>
+    <javax.el-api.version>2.2.4</javax.el-api.version>
 
     <!-- Data Transfer -->
     <jackson.version>2.6.3</jackson.version>
@@ -189,6 +190,11 @@
         <groupId>javax.transaction</groupId>
         <artifactId>jta</artifactId>
         <version>${jta.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.el</groupId>
+        <artifactId>javax.el-api</artifactId>
+        <version>${javax.el-api.version}</version>
       </dependency>
 
       <!-- Data Accessing -->

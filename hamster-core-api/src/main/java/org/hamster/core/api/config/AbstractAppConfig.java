@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class AbstractAppConfig {
     
     private @Value("${app.version}") String version;
+    private @Value("${app.environment}") String environment;
 
     /**
      * @return the version
@@ -24,11 +25,10 @@ public class AbstractAppConfig {
     }
 
     /**
-     * @param version the version to set
+     * @return the environment
      */
-    public void setVersion(String version) {
-        this.version = version;
+    public String getEnvironment() {
+        return environment;
     }
-    
     
 }
