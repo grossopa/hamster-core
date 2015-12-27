@@ -28,6 +28,9 @@
 
     <!-- Data Accessing -->
     <spring-data-jpa.version>1.9.1.RELEASE</spring-data-jpa.version>
+    
+    <!-- javax -->
+    <jta.version>1.1</jta.version>
 
     <!-- Data Transfer -->
     <jackson.version>2.6.3</jackson.version>
@@ -58,7 +61,7 @@
     <!-- Test -->
     <junit.version>4.12</junit.version>
     <mockito-core.version>1.10.19</mockito-core.version>
-    <h2.version>1.4.190</h2.version>
+    <h2.version>1.3.176</h2.version>
 
     <!-- maven plugin settings -->
     <maven.version>3.3.9</maven.version>
@@ -87,6 +90,12 @@
       <dependency>
         <groupId>org.hamster</groupId>
         <artifactId>hamster-core-api</artifactId>
+        <version>${hamster.project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamster</groupId>
+        <artifactId>hamster-core-dao</artifactId>
         <version>${hamster.project.version}</version>
       </dependency>
 
@@ -122,6 +131,31 @@
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${spring.version}</version>
       </dependency>
@@ -149,6 +183,13 @@
         <version>${hibernate-validator.version}</version>
       </dependency>
       <!-- Database ORM End -->
+
+      <!-- Javax -->
+      <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>jta</artifactId>
+        <version>${jta.version}</version>
+      </dependency>
 
       <!-- Data Accessing -->
       <dependency>

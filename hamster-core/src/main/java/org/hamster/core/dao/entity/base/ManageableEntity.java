@@ -47,10 +47,10 @@ public abstract class ManageableEntity extends StatusEntity implements Manageabl
     private Date createdOn;
     
     @Length(max = 100)
-    @Column(name = COL_CREATED_BY, length = 100, nullable = true)
+    @Column(name = COL_UPDATED_BY, length = 100, nullable = true)
     private String updatedBy;
     
-    @Column(name = COL_CREATED_ON, nullable = true)
+    @Column(name = COL_UPDATED_ON, nullable = true)
     private Date updatedOn;
 
     /*

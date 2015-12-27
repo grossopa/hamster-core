@@ -35,6 +35,12 @@
       <artifactId>hibernate-validator</artifactId>
     </dependency>
 
+    <!-- Data accessing -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+    </dependency>
+
     <!-- Utilities -->
     <dependency>
       <groupId>org.apache.commons</groupId>

@@ -13,7 +13,7 @@ import org.hamster.core.api.model.base.ManageableIfc;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public interface ManageableEntityRepository<I, M extends ManageableIfc<I>> {
+public interface ManageableEntityRepository<M extends ManageableIfc<I>, I> {
     /**
      * find all active items
      * 

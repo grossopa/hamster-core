@@ -23,7 +23,7 @@ import org.hamster.core.dao.repository.ManageableEntityRepository;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public class ManageableEntityRepositoryImpl implements ManageableEntityRepository<Long, ManageableIfc<Long>> {
+public class ManageableEntityRepositoryImpl implements ManageableEntityRepository<ManageableIfc<Long>, Long> {
 
     EntityManager entityManager;
 
