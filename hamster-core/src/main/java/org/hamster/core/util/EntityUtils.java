@@ -6,8 +6,8 @@ package org.hamster.core.util;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hamster.core.api.consts.StatusType;
 import org.hamster.core.api.model.base.ManageableIfc;
-import org.hamster.core.dao.consts.StatusEntityType;
 
 /**
  * entity related utils
@@ -52,7 +52,7 @@ public class EntityUtils {
      */
     public static final <T> void updateStatus(ManageableIfc<T> entity) {
         if (StringUtils.isEmpty(entity.getStatus())) {
-            entity.setStatus(StatusEntityType.ACTIVE);
+            entity.setStatus(StatusType.ACTIVE);
         }
     }
 

@@ -1,16 +1,14 @@
 /**
  * 
  */
-package org.hamster.core.dao.consts;
+package org.hamster.core.api.consts;
 
 /**
- * active/inactive/history
- * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public class StatusEntityType {
-
+public class StatusType {
+    
     /**
      * the record is in normal state
      */

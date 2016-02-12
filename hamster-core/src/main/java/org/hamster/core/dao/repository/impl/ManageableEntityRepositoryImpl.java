@@ -11,8 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hamster.core.api.consts.StatusType;
 import org.hamster.core.api.model.base.ManageableIfc;
-import org.hamster.core.dao.consts.StatusEntityType;
 import org.hamster.core.dao.entity.base.StatusEntity;
 import org.hamster.core.dao.repository.CriteriaQueryFactory;
 import org.hamster.core.dao.repository.ManageableEntityRepository;
@@ -49,7 +49,7 @@ public class ManageableEntityRepositoryImpl implements ManageableEntityRepositor
         CriteriaQuery<ManageableIfc<Long>> cq = cb.createQuery(clazz);
         Root<ManageableIfc<Long>> root = cq.from(clazz);
 
-        Predicate equalActive = cb.equal(root.get(StatusEntity.PROP_STATUS), StatusEntityType.ACTIVE);
+        Predicate equalActive = cb.equal(root.get(StatusEntity.PROP_STATUS), StatusType.ACTIVE);
 
         Predicate factoryResult;
         if (factory != null && (factoryResult = factory.build(cb, cq, root)) != null) {
