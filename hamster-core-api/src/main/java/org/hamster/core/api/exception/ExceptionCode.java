@@ -3,7 +3,11 @@
  */
 package org.hamster.core.api.exception;
 
+import java.util.Map;
+
 import org.springframework.util.Assert;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
@@ -11,8 +15,27 @@ import org.springframework.util.Assert;
  */
 public class ExceptionCode {
     
+    public static final Map<String, ExceptionCode> pool = Maps.newConcurrentMap();
+    
+    /**
+     * register an exception
+     * 
+     * @param code
+     * @param metadata
+     */
     public static void register(String code, ExceptionMetadata metadata) {
-        
+        ExceptionCode exceptionCode = new ExceptionCode(code, metadata);
+        pool.put(code, exceptionCode);
+    }
+    
+    /**
+     * find exception code from string
+     * 
+     * @param code
+     * @return
+     */
+    public static ExceptionCode of(String code) {
+        return pool.get(code);
     }
 
     /**
