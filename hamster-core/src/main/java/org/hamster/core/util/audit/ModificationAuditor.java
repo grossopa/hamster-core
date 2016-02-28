@@ -172,7 +172,9 @@ public class ModificationAuditor {
         private boolean exclude = true;
         private Set<String> properties = Sets.newHashSet();
         private boolean merge = false;
-        private List<? extends Auditor> auditors = Lists.newArrayList(new BooleanAuditor(), new NumberAuditor(), new StringAuditor(), new ObjectAuditor());
+
+        @SuppressWarnings("unchecked")
+        private List<? extends Auditor<?>> auditors = Lists.newArrayList(new BooleanAuditor(), new NumberAuditor(), new StringAuditor(), new ObjectAuditor());
 
         /**
          * @return the idProperty
@@ -198,7 +200,7 @@ public class ModificationAuditor {
         /**
          * @return the auditors
          */
-        public List<? extends Auditor> getAuditors() {
+        public List<? extends Auditor<?>> getAuditors() {
             return auditors;
         }
 
@@ -230,7 +232,7 @@ public class ModificationAuditor {
          * @param auditors
          *            the auditors to set
          */
-        public void setAuditors(List<Auditor> auditors) {
+        public void setAuditors(List<Auditor<?>> auditors) {
             this.auditors = auditors;
         }
 
