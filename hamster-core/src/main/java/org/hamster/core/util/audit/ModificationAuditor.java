@@ -22,7 +22,6 @@ import org.hamster.core.util.audit.model.DifferenceType;
 import org.hamster.core.util.audit.model.DifferenceVO;
 import org.hamster.core.utils.ReflectUtils;
 import org.hibernate.Hibernate;
-import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -66,7 +65,14 @@ public class ModificationAuditor {
         T sample = Iterables.isEmpty(leftColl) ? rightColl.iterator().next() : leftColl.iterator().next();
 
         // here we try to get a class from object of a presence bag so anyway the object is initialized
-        Map<String, Method> getters = ReflectUtils.findGetterMethods(Hibernate.getClass(sample));
+        Set<String> properties = Sets.newHashSet(config.getProperties());
+        if (!config.isExclude()) {
+            properties.add(idProperty);
+        }
+        Map<String, Method> getters = ReflectUtils.findGetterMethods(Hibernate.getClass(sample), config.isExclude(), properties.toArray(new String[] {}));
+
+        result.getProperties().clear();
+        result.getProperties().addAll(getters.keySet());
 
         Map<Object, T> leftMap = ReflectUtils.toMap(leftColl, getters.get(idProperty));
         Map<Object, T> rightMap = ReflectUtils.toMap(rightColl, getters.get(idProperty));

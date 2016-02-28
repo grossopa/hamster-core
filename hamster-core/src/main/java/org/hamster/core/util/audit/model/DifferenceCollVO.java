@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
  */
 public class DifferenceCollVO extends DifferenceVO {
     
+    private List<String> properties = Lists.newArrayList();
     private List<DifferenceObjectVO> objectList = Lists.newArrayList();
 
     /**
@@ -23,5 +24,14 @@ public class DifferenceCollVO extends DifferenceVO {
     public List<DifferenceObjectVO> getObjectList() {
         return objectList;
     }
+
+    /**
+     * @return the properties
+     */
+    public List<String> getProperties() {
+        return properties;
+    }
+    
+    
 
 }

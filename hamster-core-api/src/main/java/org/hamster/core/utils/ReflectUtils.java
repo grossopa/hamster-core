@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -25,8 +26,6 @@ public class ReflectUtils {
     public static final String GETTER_GET = "get";
     public static final String GETTER_IS = "is";
 
-    public static final Map<Class<?>, Map<String, Method>> CACHE = Maps.newConcurrentMap();
-
     private ReflectUtils() {
     }
 
@@ -37,12 +36,20 @@ public class ReflectUtils {
      * @return
      */
     public static final Map<String, Method> findGetterMethods(Class<?> clazz) {
+        return findGetterMethods(clazz, true, null);
+    }
+    
+    /**
+     * get getter methods with include/exclude 
+     * 
+     * @param clazz
+     * @param exclude exclude/include properties
+     * @param properties properties to be excluded/included
+     * @return
+     */
+    public static final Map<String, Method> findGetterMethods(Class<?> clazz, boolean exclude, String[] properties) {
         if (clazz == null) {
             return null;
-        }
-
-        if (CACHE.containsKey(clazz)) {
-            return CACHE.get(clazz);
         }
 
         Map<String, Method> result = Maps.newHashMap();
@@ -55,6 +62,7 @@ public class ReflectUtils {
             if ("getClass".equals(method.getName())) {
                 continue;
             }
+            
             String name = method.getName();
             String propertyName = null;
             if (name.startsWith(GETTER_GET)) {
@@ -62,11 +70,18 @@ public class ReflectUtils {
             } else if (name.startsWith(GETTER_IS)) {
                 propertyName = name.substring(GETTER_IS.length());
             }
+            propertyName = StringUtils.uncapitalize(propertyName);
+            
+            if (exclude && ArrayUtils.contains(properties, propertyName)) {
+                continue;
+            } else if (!exclude && !ArrayUtils.contains(properties, propertyName)) {
+                continue;
+            }
+            
             if (propertyName != null) {
-                result.put(StringUtils.uncapitalize(propertyName), method);
+                result.put(propertyName, method);
             }
         }
-        CACHE.put(clazz, result);
         return result;
     }
 
