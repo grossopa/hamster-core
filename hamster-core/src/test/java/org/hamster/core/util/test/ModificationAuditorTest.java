@@ -7,8 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Predicate;
-import org.hamster.core.util.audit.ModificationAuditor;
-import org.hamster.core.util.audit.ModificationAuditor.AuditorConfig;
+import org.hamster.core.util.audit.DifferenceChecker;
+import org.hamster.core.util.audit.DifferenceChecker.AuditorConfig;
 import org.hamster.core.util.audit.model.DifferenceCollVO;
 import org.hamster.core.util.audit.model.DifferenceObjectVO;
 import org.junit.Assert;
@@ -123,8 +123,8 @@ public class ModificationAuditorTest {
         f2.setPriceNumber1(33d);
         f2.setTimestamp(15);
 
-        ModificationAuditor auditor = new ModificationAuditor(new AuditorConfig());
-        DifferenceCollVO result = auditor.difference(Lists.newArrayList(f1), Lists.newArrayList(f2));
+        DifferenceChecker auditor = new DifferenceChecker(new AuditorConfig());
+        DifferenceCollVO result = auditor.check(Lists.newArrayList(f1), Lists.newArrayList(f2));
         Assert.assertEquals(1, result.getObjectList().size());
 
         Assert.assertEquals(1l, result.getObjectList().get(0).getId());
@@ -156,8 +156,8 @@ public class ModificationAuditorTest {
         AuditorConfig config = new AuditorConfig();
         config.setExclude(false);
         config.setProperties(Sets.newHashSet("male", "name"));
-        ModificationAuditor auditor = new ModificationAuditor(config);
-        DifferenceCollVO result = auditor.difference(Lists.newArrayList(f1), Lists.newArrayList(f2));
+        DifferenceChecker auditor = new DifferenceChecker(config);
+        DifferenceCollVO result = auditor.check(Lists.newArrayList(f1), Lists.newArrayList(f2));
 
         Assert.assertEquals(3, result.getProperties().size());
 
@@ -186,8 +186,8 @@ public class ModificationAuditorTest {
         AuditorConfig config = new AuditorConfig();
         config.setExclude(true);
         config.setProperties(Sets.newHashSet("male", "name"));
-        ModificationAuditor auditor = new ModificationAuditor(config);
-        DifferenceCollVO result = auditor.difference(Lists.newArrayList(f1), Lists.newArrayList(f2));
+        DifferenceChecker auditor = new DifferenceChecker(config);
+        DifferenceCollVO result = auditor.check(Lists.newArrayList(f1), Lists.newArrayList(f2));
 
         Assert.assertEquals(3, result.getProperties().size());
 

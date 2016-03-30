@@ -33,22 +33,22 @@ import com.google.common.collect.Sets;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public class ModificationAuditor {
+public class DifferenceChecker {
 
     public static final String ID = "id";
 
     private AuditorConfig config;
 
-    public ModificationAuditor(AuditorConfig config) {
+    public DifferenceChecker(AuditorConfig config) {
         this.config = config;
     }
 
-    public <T> DifferenceCollVO difference(Collection<T> leftColl, Collection<T> rightColl) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public <T> DifferenceCollVO check(Collection<T> leftColl, Collection<T> rightColl) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         DifferenceCollVO collVO = new DifferenceCollVO();
-        return doDifference(collVO, leftColl, rightColl);
+        return doCheck(collVO, leftColl, rightColl);
     }
 
-    protected <T> DifferenceCollVO doDifference(DifferenceCollVO result, Iterable<T> leftColl, Iterable<T> rightColl) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    protected <T> DifferenceCollVO doCheck(DifferenceCollVO result, Iterable<T> leftColl, Iterable<T> rightColl) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         String idProperty = StringUtils.defaultString(config.getIdProperty(), ID);
 
@@ -131,7 +131,7 @@ public class ModificationAuditor {
                 Iterable rightColl = ReflectUtils.tryInvoke(getter, rightObject);
                 DifferenceCollVO collVO = new DifferenceCollVO();
                 collVO.setProperty(property);
-                this.doDifference(collVO, leftColl, rightColl);
+                this.doCheck(collVO, leftColl, rightColl);
                 if (collVO.getObjectList().size() > 0) {
                     result.getPropertyList().put(property, collVO);
                 }
