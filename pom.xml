@@ -90,8 +90,8 @@
     <jacoco.ut.execution.data.file>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.execution.data.file>
     <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
     <coverage.reports.dir>${basedir}/target/coverage-reports</coverage.reports.dir>
-    <sonar.jacoco.reportPath>${coverage.reports.dir}/jacoco-unit.exec</sonar.jacoco.reportPath>
-    <sonar.jacoco.itReportPath> ${coverage.reports.dir}/jacoco-it.exec</sonar.jacoco.itReportPath>
+    <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-unit.exec</sonar.jacoco.itReportPath>
+    <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
     <sonar.jacoco.jar>${basedir}/lib/jacocoagent.jar</sonar.jacoco.jar>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     <skip.integration.tests>true</skip.integration.tests>
