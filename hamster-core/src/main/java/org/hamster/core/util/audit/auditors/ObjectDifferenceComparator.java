@@ -4,13 +4,13 @@
 package org.hamster.core.util.audit.auditors;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.hamster.core.util.audit.auditors.base.AbstractTypeAuditor;
+import org.hamster.core.util.audit.auditors.base.AbstractDifferenceTypeComparator;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public class ObjectAuditor extends AbstractTypeAuditor<Object> {
+public class ObjectDifferenceComparator extends AbstractDifferenceTypeComparator<Object> {
 
     /*
      * (non-Javadoc)
@@ -25,8 +25,7 @@ public class ObjectAuditor extends AbstractTypeAuditor<Object> {
     /*
      * (non-Javadoc)
      * 
-     * @see org.hamster.core.util.audit.auditors.base.Auditor#compare(java.lang.Object, java.lang.Object,
-     * java.lang.Object, java.lang.Object)
+     * @see org.hamster.core.util.audit.auditors.base.Auditor#compare(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)
      */
     @Override
     public boolean compare(Object leftValue, Object rightValue, Object leftObject, Object rightObject) {

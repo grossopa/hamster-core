@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Predicate;
 import org.hamster.core.util.audit.DifferenceChecker;
-import org.hamster.core.util.audit.DifferenceChecker.AuditorConfig;
+import org.hamster.core.util.audit.DifferenceChecker.Config;
 import org.hamster.core.util.audit.model.DifferenceCollVO;
 import org.hamster.core.util.audit.model.DifferenceObjectVO;
 import org.junit.Assert;
@@ -17,94 +17,23 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public class ModificationAuditorTest {
+public class DifferenceComparatorTest {
 
+    @Getter
+    @Setter
     public static class Foo {
         private Long id;
         private String name;
         private Integer timestamp;
         private Double priceNumber1;
         private Boolean male;
-
-        /**
-         * @return the id
-         */
-        public Long getId() {
-            return id;
-        }
-
-        /**
-         * @return the name
-         */
-        public String getName() {
-            return name;
-        }
-
-        /**
-         * @return the timestamp
-         */
-        public Integer getTimestamp() {
-            return timestamp;
-        }
-
-        /**
-         * @return the priceNumber1
-         */
-        public Double getPriceNumber1() {
-            return priceNumber1;
-        }
-
-        /**
-         * @return the male
-         */
-        public Boolean getMale() {
-            return male;
-        }
-
-        /**
-         * @param id
-         *            the id to set
-         */
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        /**
-         * @param name
-         *            the name to set
-         */
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        /**
-         * @param timestamp
-         *            the timestamp to set
-         */
-        public void setTimestamp(Integer timestamp) {
-            this.timestamp = timestamp;
-        }
-
-        /**
-         * @param priceNumber1
-         *            the priceNumber1 to set
-         */
-        public void setPriceNumber1(Double priceNumber1) {
-            this.priceNumber1 = priceNumber1;
-        }
-
-        /**
-         * @param male
-         *            the male to set
-         */
-        public void setMale(Boolean male) {
-            this.male = male;
-        }
-
     }
 
     @Test
@@ -123,7 +52,7 @@ public class ModificationAuditorTest {
         f2.setPriceNumber1(33d);
         f2.setTimestamp(15);
 
-        DifferenceChecker auditor = new DifferenceChecker(new AuditorConfig());
+        DifferenceChecker auditor = new DifferenceChecker(new Config());
         DifferenceCollVO result = auditor.check(Lists.newArrayList(f1), Lists.newArrayList(f2));
         Assert.assertEquals(1, result.getObjectList().size());
 
@@ -153,7 +82,7 @@ public class ModificationAuditorTest {
         f2.setPriceNumber1(33d);
         f2.setTimestamp(15);
 
-        AuditorConfig config = new AuditorConfig();
+        Config config = new Config();
         config.setExclude(false);
         config.setProperties(Sets.newHashSet("male", "name"));
         DifferenceChecker auditor = new DifferenceChecker(config);
@@ -183,7 +112,7 @@ public class ModificationAuditorTest {
         f2.setPriceNumber1(33d);
         f2.setTimestamp(15);
 
-        AuditorConfig config = new AuditorConfig();
+        Config config = new Config();
         config.setExclude(true);
         config.setProperties(Sets.newHashSet("male", "name"));
         DifferenceChecker auditor = new DifferenceChecker(config);

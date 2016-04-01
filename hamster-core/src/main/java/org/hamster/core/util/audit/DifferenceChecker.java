@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hamster.core.util.audit.auditors.BooleanAuditor;
-import org.hamster.core.util.audit.auditors.NumberAuditor;
-import org.hamster.core.util.audit.auditors.ObjectAuditor;
-import org.hamster.core.util.audit.auditors.StringAuditor;
-import org.hamster.core.util.audit.auditors.base.Auditor;
+import org.hamster.core.util.audit.auditors.BooleanDifferenceComparator;
+import org.hamster.core.util.audit.auditors.NumberDifferenceComparator;
+import org.hamster.core.util.audit.auditors.ObjectDifferenceComparator;
+import org.hamster.core.util.audit.auditors.StringDifferenceComparator;
+import org.hamster.core.util.audit.auditors.base.DifferenceComparator;
 import org.hamster.core.util.audit.model.DifferenceCollVO;
 import org.hamster.core.util.audit.model.DifferenceObjectVO;
 import org.hamster.core.util.audit.model.DifferenceType;
@@ -27,6 +27,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import lombok.Data;
+
 /**
  * find differences between two objects/collections
  * 
@@ -37,9 +39,9 @@ public class DifferenceChecker {
 
     public static final String ID = "id";
 
-    private AuditorConfig config;
+    private Config config;
 
-    public DifferenceChecker(AuditorConfig config) {
+    public DifferenceChecker(Config config) {
         this.config = config;
     }
 
@@ -104,6 +106,7 @@ public class DifferenceChecker {
         return result;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected <T> DifferenceObjectVO doDifferenceOnObject(T leftObject, T rightObject, Map<String, Method> getters) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         DifferenceObjectVO result;
         if (leftObject == null) {
@@ -146,7 +149,7 @@ public class DifferenceChecker {
                 result.getPropertyList().put(property, vo);
             } else {
                 // both are not null
-                for (Auditor auditor : config.auditors) {
+                for (DifferenceComparator auditor : config.getComparators()) {
                     if (auditor.canCompare(getter.getReturnType())) {
                         Object leftValue = getter.invoke(leftObject);
                         Object rightValue = getter.invoke(rightObject);
@@ -167,89 +170,20 @@ public class DifferenceChecker {
         return result;
     }
 
-    public static class AuditorConfig {
+    @Data
+    public static class Config {
         private String idProperty = ID;
         private boolean exclude = true;
-        private Set<String> properties = Sets.newHashSet();
         private boolean merge = false;
+        private Set<String> properties = Sets.newHashSet();
+        private List<DifferenceComparator<?>> comparators;
 
-        @SuppressWarnings("unchecked")
-        private List<? extends Auditor<?>> auditors = Lists.newArrayList(new BooleanAuditor(), new NumberAuditor(), new StringAuditor(), new ObjectAuditor());
-
-        /**
-         * @return the idProperty
-         */
-        public String getIdProperty() {
-            return idProperty;
+        public Config() {
+            this.comparators = Lists.newArrayList();
+            comparators.add(new BooleanDifferenceComparator());
+            comparators.add(new NumberDifferenceComparator());
+            comparators.add(new StringDifferenceComparator());
+            comparators.add(new ObjectDifferenceComparator());
         }
-
-        /**
-         * @return the exclude
-         */
-        public boolean isExclude() {
-            return exclude;
-        }
-
-        /**
-         * @return the properties
-         */
-        public Set<String> getProperties() {
-            return properties;
-        }
-
-        /**
-         * @return the auditors
-         */
-        public List<? extends Auditor<?>> getAuditors() {
-            return auditors;
-        }
-
-        /**
-         * @param idProperty
-         *            the idProperty to set
-         */
-        public void setIdProperty(String idProperty) {
-            this.idProperty = idProperty;
-        }
-
-        /**
-         * @param exclude
-         *            the exclude to set
-         */
-        public void setExclude(boolean exclude) {
-            this.exclude = exclude;
-        }
-
-        /**
-         * @param properties
-         *            the properties to set
-         */
-        public void setProperties(Set<String> properties) {
-            this.properties = properties;
-        }
-
-        /**
-         * @param auditors
-         *            the auditors to set
-         */
-        public void setAuditors(List<Auditor<?>> auditors) {
-            this.auditors = auditors;
-        }
-
-        /**
-         * @return the merge
-         */
-        public boolean isMerge() {
-            return merge;
-        }
-
-        /**
-         * @param merge
-         *            the merge to set
-         */
-        public void setMerge(boolean merge) {
-            this.merge = merge;
-        }
-
     }
 }

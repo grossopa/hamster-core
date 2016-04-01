@@ -7,12 +7,15 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import lombok.Data;
+
 /**
  * Difference on row/object level
  * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
+@Data
 public class DifferenceObjectVO {
     private DifferenceType type;
     private Object id;
@@ -36,43 +39,4 @@ public class DifferenceObjectVO {
         this.id = id;
         this.propertyList = Maps.newHashMap();
     }
-
-    /**
-     * @return the type
-     */
-    public DifferenceType getType() {
-        return type;
-    }
-
-    /**
-     * @return the id
-     */
-    public Object getId() {
-        return id;
-    }
-
-    /**
-     * @return the propertyList
-     */
-    public Map<String, DifferenceVO> getPropertyList() {
-        return propertyList;
-    }
-
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(DifferenceType type) {
-        this.type = type;
-    }
-
-    /**
-     * @param id
-     *            the id to set
-     */
-    public void setId(Object id) {
-        this.id = id;
-    }
-
-
 }

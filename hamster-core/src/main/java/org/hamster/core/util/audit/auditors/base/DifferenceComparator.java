@@ -3,24 +3,23 @@
  */
 package org.hamster.core.util.audit.auditors.base;
 
-
 /**
- * auditor used to do comparing between single properties of two object
+ * comparator used to do comparing between single properties of two object
  * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public interface Auditor<P> {
+public interface DifferenceComparator<P> {
 
     /**
-     * determine if this auditor can do comparing for certain property type
+     * determine if this comparator can do comparation
      * 
      * @param object
      * @param propertyType
      * @return
      */
     boolean canCompare(Class<?> propertyType);
-    
+
     /**
      * 
      * @param leftValue
