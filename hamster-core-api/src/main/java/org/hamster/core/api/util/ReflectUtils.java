@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.hamster.core.utils;
+package org.hamster.core.api.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -367,7 +367,5 @@ public final class ReflectUtils {
         }
         return invoke(method, object, args);
     }
-    
-    
 
 }

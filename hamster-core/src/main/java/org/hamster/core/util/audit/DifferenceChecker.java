@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hamster.core.api.util.ReflectUtils;
 import org.hamster.core.util.audit.auditors.BooleanDifferenceComparator;
 import org.hamster.core.util.audit.auditors.NumberDifferenceComparator;
 import org.hamster.core.util.audit.auditors.ObjectDifferenceComparator;
@@ -20,7 +21,6 @@ import org.hamster.core.util.audit.model.DifferenceCollVO;
 import org.hamster.core.util.audit.model.DifferenceObjectVO;
 import org.hamster.core.util.audit.model.DifferenceType;
 import org.hamster.core.util.audit.model.DifferenceVO;
-import org.hamster.core.utils.ReflectUtils;
 import org.hibernate.Hibernate;
 
 import com.google.common.collect.Iterables;

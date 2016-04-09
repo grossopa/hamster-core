@@ -24,7 +24,9 @@ public class ExceptionDtoMapper extends AbstractDtoMapper<Exception, ExceptionDt
         ExceptionDto dto = new ExceptionDto();
         if (exception instanceof ServiceException) {
             ServiceException se = (ServiceException) exception;
-            dto.setCode(se.getCode());
+            if (se.getExceptionCode() != null) {
+                dto.setCode(se.getExceptionCode().getCode());
+            }
         }
         dto.setMessage(exception.getMessage());
         return dto;

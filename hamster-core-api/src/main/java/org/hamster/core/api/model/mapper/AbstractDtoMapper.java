@@ -3,6 +3,7 @@
  */
 package org.hamster.core.api.model.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,40 +14,45 @@ import com.google.common.collect.Sets;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public abstract class AbstractDtoMapper<Src, Dto> implements DtoMapper<Src, Dto> {
+public abstract class AbstractDtoMapper<SRC, DTO> implements DtoMapper<SRC, DTO> {
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.hamster.core.model.mapper.DtoMapper#mapList(java.lang.Iterable)
+     * @see org.hamster.core.model.mapper.DTOMapper#mapList(java.lang.Iterable)
      */
     @Override
-    public List<Dto> mapList(Iterable<Src> srcs) {
-        List<Dto> result = Lists.newArrayList();
-        for (Src src : srcs) {
-            Dto dto = map(src);
-            if (dto != null) {
-                result.add(dto);
-            }
-        }
+    public List<DTO> mapList(Iterable<SRC> srcs) {
+        List<DTO> result = Lists.newArrayList();
+        map(result, srcs);
         return result;
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.hamster.core.model.mapper.DtoMapper#mapSet(java.lang.Iterable)
+     * @see org.hamster.core.model.mapper.DTOMapper#mapSet(java.lang.Iterable)
      */
     @Override
-    public Set<Dto> mapSet(Iterable<Src> srcs) {
-        Set<Dto> result = Sets.newHashSet();
-        for (Src src : srcs) {
-            Dto dto = map(src);
+    public Set<DTO> mapSet(Iterable<SRC> srcs) {
+        Set<DTO> result = Sets.newHashSet();
+        map(result, srcs);
+        return result;
+    }
+    
+    /**
+     * mapping from src to dto
+     * 
+     * @param result
+     * @param srcs
+     */
+    private void map(Collection<DTO> result, Iterable<SRC> srcs) {
+        for (SRC src : srcs) {
+            DTO dto = map(src);
             if (dto != null) {
                 result.add(dto);
             }
         }
-        return result;
     }
 
 }

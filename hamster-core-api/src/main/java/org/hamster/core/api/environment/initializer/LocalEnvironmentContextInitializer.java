@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class LocalEnvironmentContextInitializer extends EnvironmentContextInitializer {
+    /**
+     * 
+     */
     private static final Logger log = LoggerFactory.getLogger(LocalEnvironmentContextInitializer.class);
 
     /*

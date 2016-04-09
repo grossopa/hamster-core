@@ -10,14 +10,7 @@ package org.hamster.core.api.exception;
 public interface ExceptionMetadata {
     /**
      * 
-     * @return the plain message
+     * @return the message
      */
     String getMessage();
-
-    /**
-     * 
-     * @param params
-     * @return the message with params
-     */
-    String getMessage(Object... params);
 }
