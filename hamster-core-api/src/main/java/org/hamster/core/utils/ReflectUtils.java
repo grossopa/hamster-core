@@ -6,18 +6,22 @@ package org.hamster.core.utils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
 import org.springframework.util.ReflectionUtils.MethodFilter;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * reflect utilities in addition for {@link ReflectionUtils}
@@ -114,6 +118,71 @@ public final class ReflectUtils {
         return result;
     }
     
+    /**
+     * find all methods by name
+     * 
+     * @param clazz
+     * @param methodName
+     * @return 
+     */
+    public static Set<Method> findMethodsByName(final Class<?> clazz, final String methodName) {
+        Assert.notNull(clazz);
+        Assert.notNull(methodName);
+        Set<Method> result = Sets.newHashSet();
+        for (Method method : clazz.getMethods()) {
+            if (method.getName().equals(methodName)) {
+                result.add(method);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * find the executable method by params
+     * 
+     * @param methods
+     * @param params
+     * @return
+     */
+    private static Method findExecutableMethod(Iterable<Method> methods, Object... params) {
+        for (Method method : methods) {
+            if (isExecutableMethod(method, params)) {
+                return method;
+            }
+        }
+        return null;
+        
+    }
+    
+    /**
+     * determine if method is executable for input params
+     * 
+     * @param method
+     * @param params
+     * @return 
+     */
+    private static boolean isExecutableMethod(Method method, Object... params) {
+        if (method.getParameterTypes().length != params.length) {
+            return false;
+        }
+        
+        // evaluate params
+        for (int i = 0; i < params.length; i++) {
+            Object param = params[i];
+            if (param == null) {
+                // null is applicable for any types
+                continue;
+            }
+            Class<?> methodParameterType = method.getParameterTypes()[i];
+            Class<?> paramType = param.getClass();
+            if (methodParameterType.isAssignableFrom(paramType)) {
+                continue;
+            }
+            // not applicable
+            return false;
+        }
+        return true;
+    }
     
 
     /**
@@ -157,7 +226,7 @@ public final class ReflectUtils {
         }, new DefaultMethodFilter());
         return result;
     }
-
+    
     /**
      * DefaultMethodFilter to filter non-public methods and getClass
      * 
@@ -205,7 +274,7 @@ public final class ReflectUtils {
     @SuppressWarnings("unchecked")
     public static <K, T> Map<K, T> toMap(Iterable<T> coll, Method idGetterMethod) throws IllegalAccessException, InvocationTargetException {
         Map<K, T> result = Maps.newHashMap();
-        if (Iterables.isEmpty(coll)) {
+        if (coll == null || Iterables.isEmpty(coll)) {
             return result;
         }
         if (!idGetterMethod.isAccessible()) {
@@ -226,21 +295,79 @@ public final class ReflectUtils {
      * @param args
      * @return value / null
      */
-    @SuppressWarnings("unchecked")
     public static <T> T tryInvoke(Method method, Object object, Object... args) {
-        boolean methodAccessible = method.isAccessible();
+        boolean methodAccessible = false;
         try {
+            methodAccessible = method.isAccessible();
             if (!methodAccessible) {
                 method.setAccessible(true);
             }
-            return (T) method.invoke(object, args);
+            return invoke(method, object, args);
         } catch (Exception e) {
+            // catch any exception and return null
             return null;
         } finally {
-            if (!methodAccessible) {
+            if (method != null && !methodAccessible) {
                 method.setAccessible(methodAccessible);
             }
         }
     }
+    
+    /**
+     * try to invoke a method by method name, return null for any exceptions
+     * 
+     * @param methodName
+     * @param object
+     * @param args
+     * @return value / null
+     */
+    public static <T> T tryInvoke(String methodName, Object object, Object... args) {
+        try {
+            Set<Method> methods = findMethodsByName(object.getClass(), methodName);
+            Method method = findExecutableMethod(methods, args);
+            return tryInvoke(method, object, args);
+        } catch (Exception e) {
+            // catch any exceptions and return null instead
+            return null;
+        }
+    }
+    
+    /**
+     * invoke a method
+     * 
+     * @param method
+     * @param object
+     * @param args
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T invoke(Method method, Object object, Object... args) throws IllegalAccessException, InvocationTargetException {
+        return (T) method.invoke(object, args);
+    }
+    
+    /**
+     * invoke a method by method name
+     * 
+     * @param methodName
+     * @param object
+     * @param args
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public static <T> T invoke(String methodName, Object object, Object... args) throws IllegalAccessException, InvocationTargetException {
+        Assert.notNull(methodName);
+        Assert.notNull(object);
+        Set<Method> methods = findMethodsByName(object.getClass(), methodName);
+        Method method = findExecutableMethod(methods, args);
+        if (method == null) {
+            throw new NullPointerException(MessageFormat.format("Cannot find method {0} of Class {1}.", methodName, object.getClass().getName()));
+        }
+        return invoke(method, object, args);
+    }
+    
+    
 
 }
