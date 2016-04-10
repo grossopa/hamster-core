@@ -19,13 +19,12 @@ public class ComparatorUtils {
      * @return 1 if o1 is null, -1 if o2 is null, 0 if both nulls and null if both not null
      */
     public static final Integer obviateNull(Object o1, Object o2) {
-        if (o1 == null && o2 != null) {
-            return 1;
-        } else if (o1 != null && o2 == null) {
+        if (o1 == null) {
+            return o2 == null ? 0 : 1;
+        } else if (o2 == null) {
             return -1;
-        } else if (o1 == null && o2 == null) {
-            return 0;
         }
+
         return null;
     }
 }

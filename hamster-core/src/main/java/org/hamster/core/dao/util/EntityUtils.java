@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.hamster.core.util;
+package org.hamster.core.dao.util;
 
 import java.util.Date;
 
