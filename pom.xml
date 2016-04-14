@@ -11,6 +11,7 @@
     <module>hamster-sampleapp</module>
     <module>hamster-core-api</module>
     <module>hamster-core-test</module>
+    <module>hamster-core-web</module>
   </modules>
 
   <properties>
@@ -108,6 +109,12 @@
       <dependency>
         <groupId>org.hamster</groupId>
         <artifactId>hamster-core-dao</artifactId>
+        <version>${hamster.project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamster</groupId>
+        <artifactId>hamster-core-web</artifactId>
         <version>${hamster.project.version}</version>
       </dependency>
 
@@ -216,7 +223,7 @@
       </dependency>
       <!-- Data Accessing End -->
 
-      <!-- Data Transfer -->
+      <!-- Data Transfer Jackson -->
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
@@ -232,7 +239,7 @@
         <artifactId>jackson-module-jaxb-annotations</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-      <!-- Data Transfer End -->
+      <!-- Data Transfer Jackson End -->
 
       <!-- Cache -->
       <dependency>
@@ -270,6 +277,24 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.tiles</groupId>
+        <artifactId>tiles-extras</artifactId>
+        <version>${tiles.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.tiles</groupId>
+        <artifactId>tiles-servlet</artifactId>
+        <version>${tiles.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.tiles</groupId>
+        <artifactId>tiles-jsp</artifactId>
+        <version>${tiles.version}</version>
       </dependency>
       <!-- Template Engine End -->
 
