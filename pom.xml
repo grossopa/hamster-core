@@ -45,7 +45,7 @@
 
     <!-- Template Engine -->
     <freemarker.version>2.3.20</freemarker.version>
-    <tiles.version>3.0.5</tiles.version>
+    <tiles.version>2.2.2</tiles.version>
 
     <!-- Logs -->
     <slf4j.version>1.7.13</slf4j.version>
@@ -59,6 +59,9 @@
     <guava.version>18.0</guava.version>
     <lombok.version>1.16.8</lombok.version>
 
+    <!-- jsp -->
+    <jstl.version>1.2</jstl.version>
+
     <!-- Utilities Bean -->
     <dozer.version>5.5.1</dozer.version>
 
@@ -68,6 +71,9 @@
     <jcabi-matchers.version>1.3</jcabi-matchers.version>
     <mockito-all.version>1.10.19</mockito-all.version>
     <h2.version>1.3.176</h2.version>
+    <tomcat.version>8.0.33</tomcat.version>
+    <jsp-api.version>2.0</jsp-api.version>
+    <servlet-api.version>2.5</servlet-api.version>
 
     <!-- maven plugin settings -->
     <maven.version>3.3.9</maven.version>
@@ -213,6 +219,7 @@
         <groupId>javax.el</groupId>
         <artifactId>javax.el-api</artifactId>
         <version>${javax.el-api.version}</version>
+        <scope>provided</scope>
       </dependency>
 
       <!-- Data Accessing -->
@@ -278,7 +285,7 @@
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.apache.tiles</groupId>
         <artifactId>tiles-extras</artifactId>
@@ -381,6 +388,14 @@
       </dependency>
       <!-- Utilities bean End -->
 
+      <!-- jsp -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>${jstl.version}</version>
+      </dependency>
+      <!-- jsp End -->
+
       <!-- Test -->
       <dependency>
         <groupId>org.springframework</groupId>
@@ -423,6 +438,24 @@
         <artifactId>h2</artifactId>
         <version>${h2.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-jsp-api</artifactId>
+        <version>${tomcat.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jsp-api</artifactId>
+        <version>${jsp-api.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>${servlet-api.version}</version>
+        <scope>provided</scope>
       </dependency>
       <!-- Test End -->
 
