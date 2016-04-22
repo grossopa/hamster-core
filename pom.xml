@@ -730,6 +730,7 @@
           <warName>${project.artifactId}</warName>
         </configuration>
       </plugin>
+      
     </plugins>
   </build>
 </project>

@@ -10,5 +10,5 @@ import org.hamster.core.web.controller.AbstractController;
  * @since 1.0
  */
 public abstract class AbstractPageController extends AbstractController {
-    
+     
 }
