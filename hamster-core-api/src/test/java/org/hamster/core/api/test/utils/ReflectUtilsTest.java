@@ -121,6 +121,13 @@ public class ReflectUtilsTest {
         Map<Long, Bar> result = ReflectUtils.toMap(null, Bar.class, "id");
         Assert.assertTrue(result.isEmpty());
     }
+    
+    @Test
+    public void testToMap3() throws IllegalAccessException, InvocationTargetException {
+        List<Bar> coll = Lists.newArrayList();
+        Map<Long, Bar> result = ReflectUtils.toMap(coll, Bar.class, "id");
+        Assert.assertTrue(result.isEmpty());
+    }
 
     @Test
     public void testTryInvoke() {

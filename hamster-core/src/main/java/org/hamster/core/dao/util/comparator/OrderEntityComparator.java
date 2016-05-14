@@ -1,14 +1,14 @@
 /**
  * 
  */
-package org.hamster.core.util.comparator;
+package org.hamster.core.dao.util.comparator;
 
 import java.util.Comparator;
 
 import org.hamster.core.api.model.base.OrderIfc;
 
 /**
- * sort by order ASC
+ * sort by order ASC, id ASC
  * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
@@ -30,9 +30,14 @@ public class OrderEntityComparator<T> implements Comparator<OrderIfc<T>> {
         Integer order = ComparatorUtils.obviateNull(o1.getOrder(), o2.getOrder());
         if (order != null) {
             return order;
-        } else {
-            return o1.getOrder().compareTo(o2.getOrder());
         }
+        result = o1.getOrder().compareTo(o2.getOrder());
+        
+        if (result == 0) {
+            result = new IdEntityComparator<T>().compare(o1, o2);
+        }
+        
+        return result;
     }
 
 }

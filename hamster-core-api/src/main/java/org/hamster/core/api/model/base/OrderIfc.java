@@ -12,7 +12,9 @@ package org.hamster.core.api.model.base;
  * @version 1.0
  */
 public interface OrderIfc<T> extends IdIfc<T> {
-
+    
+    public static final String COL_NAME = "_order";
+    
     /**
      * 
      * @return the order

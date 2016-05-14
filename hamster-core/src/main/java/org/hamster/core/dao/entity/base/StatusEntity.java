@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 import org.hamster.core.api.model.base.StatusIfc;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -17,6 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @version 1.0
  */
 @MappedSuperclass
+@Where(clause = "status == 'ACTIVE'")
 public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
 
     public static final String PROP_STATUS = "status";
@@ -24,7 +26,7 @@ public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
 
     @Length(max = 20)
     @NotBlank
-    @Column(name = COL_STATUS, length = 20, nullable = false)
+    @Column(name = COL_STATUS, length = 20, nullable = true, columnDefinition = "default 'ACTIVE'")
     private String status;
 
     /*

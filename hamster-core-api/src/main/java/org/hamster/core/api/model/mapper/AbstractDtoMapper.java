@@ -24,7 +24,7 @@ public abstract class AbstractDtoMapper<SRC, DTO> implements DtoMapper<SRC, DTO>
     @Override
     public List<DTO> mapList(Iterable<SRC> srcs) {
         List<DTO> result = Lists.newArrayList();
-        map(result, srcs);
+        mapCollection(result, srcs);
         return result;
     }
 
@@ -36,17 +36,38 @@ public abstract class AbstractDtoMapper<SRC, DTO> implements DtoMapper<SRC, DTO>
     @Override
     public Set<DTO> mapSet(Iterable<SRC> srcs) {
         Set<DTO> result = Sets.newHashSet();
-        map(result, srcs);
+        mapCollection(result, srcs);
         return result;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.hamster.core.api.model.mapper.DtoMapper#map(java.lang.Object)
+     */
+    @Override
+    public DTO map(SRC src) {
+        if (src == null) {
+            return null;
+        }
+        return doMap(src);
+    }
     
+    /**
+     * map non-null src to dto
+     * 
+     * @param src
+     * @return dto
+     */
+    abstract protected DTO doMap(SRC src);
+
     /**
      * mapping from src to dto
      * 
      * @param result
      * @param srcs
      */
-    private void map(Collection<DTO> result, Iterable<SRC> srcs) {
+    private void mapCollection(Collection<DTO> result, Iterable<SRC> srcs) {
         for (SRC src : srcs) {
             DTO dto = map(src);
             if (dto != null) {

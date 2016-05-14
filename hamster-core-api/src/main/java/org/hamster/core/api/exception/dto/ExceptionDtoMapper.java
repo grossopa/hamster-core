@@ -17,10 +17,10 @@ public class ExceptionDtoMapper extends AbstractDtoMapper<Exception, ExceptionDt
     /*
      * (non-Javadoc)
      * 
-     * @see org.hamster.core.api.model.mapper.DtoMapper#map(java.lang.Object)
+     * @see org.hamster.core.api.model.mapper.AbstractDtoMapper#doMap(java.lang.Object)
      */
     @Override
-    public ExceptionDto map(Exception exception) {
+    public ExceptionDto doMap(Exception exception) {
         ExceptionDto dto = new ExceptionDto();
         if (exception instanceof ServiceException) {
             ServiceException se = (ServiceException) exception;

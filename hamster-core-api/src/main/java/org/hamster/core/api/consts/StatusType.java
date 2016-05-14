@@ -12,15 +12,15 @@ public class StatusType {
     /**
      * the record is in normal state
      */
-    public static final String ACTIVE = "active";
+    public static final String ACTIVE = "ACTIVE";
 
     /**
      * the record has been deleted
      */
-    public static final String INACTIVE = "inactive";
+    public static final String INACTIVE = "INACTIVE";
 
     /**
      * the record is inactive and be treated as a history
      */
-    public static final String HISTORY = "history";
+    public static final String HISTORY = "HISTORY";
 }

@@ -55,7 +55,22 @@ public class EntityUtils {
             entity.setStatus(StatusType.ACTIVE);
         }
     }
-    
-    
+
+    /**
+     * copy modify info
+     * 
+     * @param target
+     * @param source
+     */
+    public static final <T> void copyModifyInfo(ManageableIfc<T> target, ManageableIfc<T> source) {
+        if (target != null && source != null) {
+            target.setCreatedBy(source.getCreatedBy());
+            target.setCreatedOn(source.getCreatedOn());
+            target.setId(source.getId());
+            target.setStatus(source.getStatus());
+            target.setUpdatedBy(source.getUpdatedBy());
+            target.setUpdatedOn(source.getUpdatedOn());
+        }
+    }
 
 }

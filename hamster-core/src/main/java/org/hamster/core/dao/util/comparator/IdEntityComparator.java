@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.hamster.core.util.comparator;
+package org.hamster.core.dao.util.comparator;
 
 import java.util.Comparator;
 

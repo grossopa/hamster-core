@@ -204,6 +204,11 @@
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-envers</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${hibernate-validator.version}</version>
       </dependency>
@@ -730,7 +735,7 @@
           <warName>${project.artifactId}</warName>
         </configuration>
       </plugin>
-      
+
     </plugins>
   </build>
 </project>
