@@ -15,6 +15,8 @@ import com.google.common.collect.Sets;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
@@ -58,14 +60,16 @@ class FooDtoMapper extends AbstractDtoMapper<Foo, FooDto> {
 
 }
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 class Foo {
     String id;
     String name;
 }
 
-@Data
+@Getter
+@Setter
 class FooDto {
     String id;
     String name;

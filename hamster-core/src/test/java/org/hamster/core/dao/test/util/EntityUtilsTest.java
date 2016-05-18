@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
@@ -125,7 +127,8 @@ public class EntityUtilsTest {
     }
 }
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode
 class TestEntity implements ManageableIfc<Long> {
     private String createdBy;

@@ -20,7 +20,10 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractWebInterceptor.class);
 
-    public static final String ATTRIBUTE_NAME = "__time_track";
+    /**
+     * time_track to put into user's request attribute
+     */
+    public static final String ATTR_TIME_TRACK = "__time_track";
 
     /*
      * (non-Javadoc)
@@ -29,7 +32,7 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        request.setAttribute(ATTRIBUTE_NAME, System.currentTimeMillis());
+        request.setAttribute(ATTR_TIME_TRACK, System.currentTimeMillis());
         return true;
     }
 
@@ -41,7 +44,7 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        Long time = System.currentTimeMillis() - (Long) request.getAttribute(ATTRIBUTE_NAME);
+        Long time = System.currentTimeMillis() - (Long) request.getAttribute(ATTR_TIME_TRACK);
         logAccessTime(log, time, request);
     }
 

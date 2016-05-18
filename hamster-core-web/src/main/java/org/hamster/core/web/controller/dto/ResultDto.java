@@ -3,13 +3,15 @@
  */
 package org.hamster.core.web.controller.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@Data
+@Getter
+@Setter
 public class ResultDto<T> {
     private String message;
     private T data;
@@ -32,7 +34,7 @@ public class ResultDto<T> {
      * @return
      */
     public static final <U> ResultDto<U> of(String message, U data) {
-        ResultDto<U> dto = new ResultDto<U>();
+        ResultDto<U> dto = new ResultDto<>();
         dto.setMessage(message);
         dto.setData(data);
         return dto;
