@@ -15,8 +15,6 @@ import com.google.common.collect.Lists;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
@@ -49,8 +47,7 @@ public class OrderEntityComparatorTest {
     }
 }
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 class Foo implements OrderIfc<Long> {
     private Long id;
