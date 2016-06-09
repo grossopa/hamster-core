@@ -6,6 +6,7 @@ package org.hamster.core.dao.util.comparator;
 import java.util.Comparator;
 
 import org.hamster.core.api.model.base.OrderIfc;
+import org.hamster.core.api.util.ComparatorUtils;
 
 /**
  * sort by order ASC, id ASC

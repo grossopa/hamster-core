@@ -13,7 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-public interface DiffMerger<K, T> {
+public interface Merger<K, T> {
     
     /**
      * merge added

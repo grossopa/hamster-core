@@ -7,13 +7,15 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@Data
+@Getter
+@Setter
 public class DiffResultVO {
     private List<String> properties = Lists.newArrayList();
     private List<DiffObjectVO> objectList = Lists.newArrayList();

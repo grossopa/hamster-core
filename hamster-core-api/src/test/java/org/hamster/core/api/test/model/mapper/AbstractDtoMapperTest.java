@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.hamster.core.dao.util.comparator;
+package org.hamster.core.api.util;
 
 /**
  * contains utils for comparator

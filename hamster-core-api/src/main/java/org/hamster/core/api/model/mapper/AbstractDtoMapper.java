@@ -67,7 +67,7 @@ public abstract class AbstractDtoMapper<SRC, DTO> implements DtoMapper<SRC, DTO>
      * @param result
      * @param srcs
      */
-    private void mapCollection(Collection<DTO> result, Iterable<SRC> srcs) {
+    protected void mapCollection(Collection<DTO> result, Iterable<SRC> srcs) {
         for (SRC src : srcs) {
             DTO dto = map(src);
             if (dto != null) {

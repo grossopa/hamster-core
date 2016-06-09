@@ -11,7 +11,6 @@ import org.hamster.core.dao.util.EntityUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.hamster.core.dao.test.util.comparator;
+package org.hamster.core.api.test.utils;
 
-import org.hamster.core.dao.util.comparator.ComparatorUtils;
+import org.hamster.core.api.util.ComparatorUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
