@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.hamster.core.api.util.difference.model;
 
 /**

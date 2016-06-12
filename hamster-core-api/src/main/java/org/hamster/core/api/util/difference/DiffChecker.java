@@ -3,25 +3,21 @@
  */
 package org.hamster.core.api.util.difference;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.hamster.core.api.util.ReflectUtils;
-import org.hamster.core.api.util.difference.DiffChecker.Config;
-import org.hamster.core.api.util.difference.DiffChecker.ExecutorResult;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
 import org.hamster.core.api.util.difference.comparator.defaults.NumberComparator;
 import org.hamster.core.api.util.difference.comparator.defaults.ObjectComparator;
+import org.hamster.core.api.util.difference.internal.executors.CheckerExecutor;
+import org.hamster.core.api.util.difference.internal.executors.MergerExecutor;
+import org.hamster.core.api.util.difference.internal.model.ExecutorResult;
 import org.hamster.core.api.util.difference.merger.Merger;
+import org.hamster.core.api.util.difference.merger.defaults.DefaultMerger;
 import org.hamster.core.api.util.difference.model.DiffObjectVO;
+import org.hamster.core.api.util.difference.model.DiffResultVO;
+import org.hamster.core.api.util.difference.model.DiffType;
 import org.hamster.core.api.util.difference.model.mapper.DiffObjectVOMapper;
 import org.hamster.core.api.util.difference.transformer.IdInvoker;
 import org.hamster.core.api.util.difference.transformer.PropertyInvoker;
@@ -31,58 +27,117 @@ import org.hamster.core.api.util.difference.walker.Walker;
 import org.hamster.core.api.util.difference.walker.defaults.DefaultWalker;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * to check and find differences from 2 collections
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
+@Getter
+@Setter
 public class DiffChecker<K, T> {
 
-    @Getter
-    @Setter
+    /**
+     * the idProperty name, must have a corresponding getter method
+     * 
+     * <p>
+     * Default value is "id"
+     * </p>
+     */
     private String idProperty;
 
-    @Getter
-    @Setter
+    /**
+     * Whether to include or exclude {{@link #getProperties()} during comparing and merging.
+     * 
+     * <p>
+     * Default value is true and properties is empty
+     * </p>
+     * <p>
+     * {@link #getIdProperty()} cannot be excluded
+     * </p>
+     */
     private boolean exclude = true;
 
-    @Getter
-    @Setter
+    /**
+     * Whether to include or exclude {{@link #getProperties()} during comparing and merging.
+     * 
+     * <p>
+     * Default value is true and properties is empty
+     * </p>
+     * <p>
+     * {@link #getIdProperty()} cannot be excluded
+     * </p>
+     */
     private String[] properties;
 
-    @Getter
-    @Setter
+    /**
+     * to get added/removed/changed list and compare properties
+     * 
+     * <p>
+     * Default value is {@link DefaultWalker}
+     * </p>
+     */
     private Walker<K, T> walker;
 
-    @Getter
-    @Setter
+    /**
+     * to merge the target collection into source collection
+     * 
+     * <p>
+     * Default value is {@link DefaultMerger}
+     * </p>
+     */
     private Merger<K, T> merger;
 
-    @Getter
-    @Setter
+    /**
+     * {@link #getIdProperty()} invoker
+     * 
+     * <p>
+     * Default value is {@link DefaultIdInvoker}
+     * </p>
+     */
     private IdInvoker<K, T> idInvoker;
 
-    @Getter
-    @Setter
-    private PropertyInvoker<K, T> propertyInvoker;
+    /**
+     * invoke properties
+     * 
+     * <p>
+     * Default value is {@link DefaultPropertyInvoker}
+     * </p>
+     */
+    private PropertyInvoker<T> propertyInvoker;
 
-    @Getter
-    @Setter
+    /**
+     * compare properties with order, see {@link PropertyComparator} for details
+     * 
+     * <p>
+     * {@link NumberComparator} and {@link ObjectComparator} are the last two items
+     * </p>
+     */
     private List<PropertyComparator> propertyComparators;
 
-    public List<DiffObjectVO> check(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) throws DiffCheckerException {
-
+    /**
+     * Check and get the difference details between two collections.
+     * 
+     * @param clazz
+     *            the class of these objects
+     * @param sourceColl
+     *            source collection
+     * @param targetColl
+     *            target collection
+     * @return list of {@link DiffObjectVO} contains the details of difference
+     * @throws DiffCheckerException
+     */
+    public DiffResultVO<K, T> check(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) throws DiffCheckerException {
         // ensure walker and merger are valid
         Config<K, T> config = validateConfig();
 
         // find all different items
-        DiffCheckerExecutor<K, T> executor = new DiffCheckerExecutor<K, T>();
-        executor.setConfig(config);
+        CheckerExecutor<K, T> executor = new CheckerExecutor<K, T>(config);
         ExecutorResult<K, T> result = executor.doCheck(clazz, sourceColl, targetColl);
 
         // map result into list of {@link DiffObjectVO}
@@ -92,13 +147,32 @@ public class DiffChecker<K, T> {
         List<DiffObjectVO> removedDiffObjects = objectVOMapper.mapRemovedColl(result.getRemovedColl());
         List<DiffObjectVO> changedDiffObjects = objectVOMapper.mapChangedColl(result.getChangedColl());
 
-        List<DiffObjectVO> listResult = Lists.newArrayList();
-        listResult.addAll(addedDiffObjects);
-        listResult.addAll(removedDiffObjects);
-        listResult.addAll(changedDiffObjects);
-        return listResult;
+        // combine results and return
+        DiffResultVO<K, T> diffResultVO = new DiffResultVO<K, T>();
+        diffResultVO.setProperties(Sets.newHashSet(result.getMethods().keySet()));
+        diffResultVO.getResults().put(DiffType.ADD, addedDiffObjects);
+        diffResultVO.getResults().put(DiffType.REMOVAL, removedDiffObjects);
+        diffResultVO.getResults().put(DiffType.CHANGE, changedDiffObjects);
+
+        diffResultVO.setAddedColl(result.getAddedColl());
+        diffResultVO.setRemovedColl(result.getRemovedColl());
+        diffResultVO.setChangedColl(result.getChangedColl());
+
+        return diffResultVO;
     }
 
+    public void merge(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl, DiffResultVO<K, T> diffResultVO)
+            throws DiffCheckerException {
+        Config<K, T> config = validateConfig();
+        MergerExecutor<K, T> executor = new MergerExecutor<K, T>(config);
+        executor.doMerge(clazz, sourceColl, targetColl, diffResultVO);
+    }
+
+    /**
+     * Validate and create {@link Config} instance.
+     * 
+     * @return config
+     */
     protected Config<K, T> validateConfig() {
         Config<K, T> config = new Config<K, T>();
         config.setExclude(exclude);
@@ -119,7 +193,7 @@ public class DiffChecker<K, T> {
         }
 
         if (propertyInvoker == null) {
-            config.setPropertyInvoker(new DefaultPropertyInvoker<K, T>());
+            config.setPropertyInvoker(new DefaultPropertyInvoker<T>());
         }
 
         if (propertyComparators == null) {
@@ -131,12 +205,11 @@ public class DiffChecker<K, T> {
         config.getPropertyComparators().add(new ObjectComparator());
 
         if (walker == null) {
-            config.setWalker(new DefaultWalker<K, T>(config.getIdInvoker(), config.getPropertyComparators()));
+            config.setWalker(new DefaultWalker<K, T>(config.getIdInvoker(), config.getPropertyInvoker(), config.getPropertyComparators()));
         }
 
         if (merger == null) {
-            // dont have yet
-            config.setMerger(merger);
+            config.setMerger(new DefaultMerger<K, T>(config.getPropertyInvoker()));
         }
 
         if (properties == null) {
@@ -146,93 +219,55 @@ public class DiffChecker<K, T> {
         return config;
     }
 
+    /**
+     * Configuration used in {@link DiffCheckerExecutor}, it will collect {@link DiffChecker} configuration properties and set with default values if values are not set.
+     * 
+     * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
+     * @since 1.0
+     */
     @Getter
     @Setter
     public static class Config<K, T> {
 
+        /**
+         * @see DiffChecker#idProperty
+         */
         private String idProperty;
 
+        /**
+         * @see DiffChecker#exclude
+         */
         private boolean exclude = true;
 
+        /**
+         * @see DiffChecker#properties
+         */
         private String[] properties;
 
+        /**
+         * @see DiffChecker#walker
+         */
         private Walker<K, T> walker;
 
+        /**
+         * @see DiffChecker#merger
+         */
         private Merger<K, T> merger;
 
+        /**
+         * @see DiffChecker#idInvoker
+         */
         private IdInvoker<K, T> idInvoker;
 
-        private PropertyInvoker<K, T> propertyInvoker;
+        /**
+         * @see DiffChecker#propertyInvoker
+         */
+        private PropertyInvoker<T> propertyInvoker;
 
+        /**
+         * @see DiffChecker#propertyComparators
+         */
         private List<PropertyComparator> propertyComparators;
     }
 
-    @Getter
-    @Setter
-    static class ExecutorResult<K, T> {
-
-        private Map<String, Method> methods;
-
-        private Collection<T> addedColl;
-
-        private Map<K, T> removedColl;
-
-        private Map<K, Pair<T, T>> changedColl;
-    }
-
-}
-
-class DiffCheckerExecutor<K, T> {
-
-    @Setter
-    private Config<K, T> config;
-
-    public ExecutorResult<K, T> doCheck(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) throws DiffCheckerException {
-        Map<K, T> sourceMap = toMap(clazz, sourceColl);
-
-        Map<String, Method> methods = findProperties(clazz);
-
-        // find added elements
-        Collection<T> addedColl = config.getWalker().walkForAdded(sourceMap, targetColl, methods);
-
-        // find removed elements
-        Map<K, T> removedColl = config.getWalker().walkForRemoved(sourceMap, targetColl, methods);
-
-        Map<K, Pair<T, T>> changedColl = Maps.newHashMap();
-
-        // find changed elements
-        for (T target : targetColl) {
-            K id = config.getIdInvoker().invoke(methods, target);
-            if (sourceMap.containsKey(id)) {
-                T source = sourceMap.get(id);
-                Set<String> changedProperties = config.getWalker().walkProperty(source, target, methods);
-                if (CollectionUtils.isNotEmpty(changedProperties)) {
-                    changedColl.put(id, new ImmutablePair<T, T>(source, target));
-                }
-            }
-        }
-
-        ExecutorResult<K, T> result = new ExecutorResult<K, T>();
-        result.setMethods(methods);
-        result.setAddedColl(addedColl);
-        result.setRemovedColl(removedColl);
-        result.setChangedColl(changedColl);
-        return result;
-    }
-
-    protected Map<String, Method> findProperties(Class<T> clazz) {
-        Set<String> temp = Sets.newHashSet(config.getProperties());
-        if (!config.isExclude()) {
-            temp.add(config.getIdProperty());
-        }
-        return ReflectUtils.findGetterMethods(clazz, config.isExclude(), temp.toArray(new String[] {}));
-    }
-
-    protected Map<K, T> toMap(Class<T> clazz, Collection<T> sourceColl) throws DiffCheckerException {
-        try {
-            return ReflectUtils.toMap(sourceColl, clazz, config.getIdProperty());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new DiffCheckerException("Failed to convert collection to map.", e);
-        }
-    }
 }

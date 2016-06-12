@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-public interface PropertyInvoker<V, T> {
+public interface PropertyInvoker<T> {
 
     /**
      * 
@@ -21,5 +21,5 @@ public interface PropertyInvoker<V, T> {
      * @param object
      * @return the value
      */
-    V invoke(String property, Method getterMethod, T object);
+    Object invoke(String property, Method getterMethod, T object);
 }

@@ -14,6 +14,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
@@ -30,6 +32,8 @@ import com.google.common.collect.Sets;
  * @version May 13, 2014 5:40:47 PM
  */
 public final class ReflectUtils {
+    
+    private static final Logger log = LoggerFactory.getLogger(ReflectUtils.class);
 
     public static final String GETTER_GET = "get";
     public static final String GETTER_IS = "is";
@@ -304,7 +308,7 @@ public final class ReflectUtils {
             }
             return invoke(method, object, args);
         } catch (Exception e) {
-            // catch any exception and return null
+            log.info("Invoke method failed " + method + " for Object " + object, e);
             return null;
         } finally {
             if (method != null && !methodAccessible) {
@@ -327,7 +331,7 @@ public final class ReflectUtils {
             Method method = findExecutableMethod(methods, args);
             return tryInvoke(method, object, args);
         } catch (Exception e) {
-            // catch any exceptions and return null instead
+            log.info("Invoke method failed: " + methodName + " for Object " + object, e);
             return null;
         }
     }

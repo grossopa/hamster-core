@@ -5,7 +5,9 @@ package org.hamster.core.api.util.difference.model;
 
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,6 +16,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiffObjectVO {
     private DiffType type;
     private Object id;

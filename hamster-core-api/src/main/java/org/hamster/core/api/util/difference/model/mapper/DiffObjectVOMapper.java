@@ -29,7 +29,7 @@ public class DiffObjectVOMapper<K, T> {
 
     private final IdInvoker<K, T> idInvoker;
 
-    private final PropertyInvoker<K, T> propertyInvoker;
+    private final PropertyInvoker<T> propertyInvoker;
 
     private final Map<String, Method> methods;
 
@@ -43,7 +43,7 @@ public class DiffObjectVOMapper<K, T> {
      * @param methods
      *            property/method pair, getter method must be no arguments
      */
-    public DiffObjectVOMapper(IdInvoker<K, T> idInvoker, PropertyInvoker<K, T> propertyInvoker, Map<String, Method> methods,
+    public DiffObjectVOMapper(IdInvoker<K, T> idInvoker, PropertyInvoker<T> propertyInvoker, Map<String, Method> methods,
             List<PropertyComparator> propertyComparators) {
         this.idInvoker = idInvoker;
         this.propertyInvoker = propertyInvoker;
@@ -140,19 +140,12 @@ public class DiffObjectVOMapper<K, T> {
 
             DiffVO vo = new DiffVO();
             vo.setProperty(property);
-            switch (type) {
-            case ADD:
+            if (type == DiffType.ADD) {
                 vo.setOldValue(null);
                 vo.setNewValue(value);
-                break;
-            case REMOVAL:
+            } else if (type == DiffType.REMOVAL) {
                 vo.setOldValue(value);
                 vo.setNewValue(null);
-                break;
-            case CHANGE:
-            default:
-                // never happens
-                break;
             }
 
             result.put(property, vo);

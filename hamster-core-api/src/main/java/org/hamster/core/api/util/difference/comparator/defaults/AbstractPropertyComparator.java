@@ -7,6 +7,8 @@ import org.hamster.core.api.util.ComparatorUtils;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
 
 /**
+ * Default implementation for {@link PropertyComparator}
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */

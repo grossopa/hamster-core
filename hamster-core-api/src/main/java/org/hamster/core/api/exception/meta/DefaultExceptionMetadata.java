@@ -11,6 +11,8 @@ import org.hamster.core.api.exception.ExceptionMetadata;
  */
 public class DefaultExceptionMetadata implements ExceptionMetadata {
 
+    private static final long serialVersionUID = 8443383003863034072L;
+    
     private final String message;
 
     /**

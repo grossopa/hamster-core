@@ -3,7 +3,9 @@
  */
 package org.hamster.core.api.util.difference.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,6 +16,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiffVO {
     private String property;
     private Object oldValue;

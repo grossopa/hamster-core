@@ -10,11 +10,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Doubles;
 
 /**
+ * Including compare support for primitive and non-primitive numbers
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
 public class NumberComparator extends AbstractPropertyComparator {
 
+    /**
+     * list of primitive number types
+     */
     public static final Set<String> PRIMITIVES = ImmutableSet.of("short", "int", "long", "float", "double");
 
     /*

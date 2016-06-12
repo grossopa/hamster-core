@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hamster.core.api.util.ReflectUtils;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
 import org.hamster.core.api.util.difference.transformer.IdInvoker;
+import org.hamster.core.api.util.difference.transformer.PropertyInvoker;
 import org.hamster.core.api.util.difference.walker.Walker;
 
 import com.google.common.collect.Lists;
@@ -28,10 +28,13 @@ public class DefaultWalker<K, T> implements Walker<K, T> {
 
     private final IdInvoker<K, T> idInvoker;
 
+    private final PropertyInvoker<T> propertyInvoker;
+
     private final List<PropertyComparator> propertyComparators;
 
-    public DefaultWalker(IdInvoker<K, T> idInvoker,  List<PropertyComparator> propertyComparators) {
+    public DefaultWalker(IdInvoker<K, T> idInvoker, PropertyInvoker<T> propertyInvoker, List<PropertyComparator> propertyComparators) {
         this.idInvoker = idInvoker;
+        this.propertyInvoker = propertyInvoker;
         this.propertyComparators = propertyComparators;
     }
 
@@ -81,14 +84,14 @@ public class DefaultWalker<K, T> implements Walker<K, T> {
     @Override
     public Set<String> walkProperty(T source, T target, Map<String, Method> methods) {
         Set<String> result = Sets.newHashSet();
-        
+
         for (Map.Entry<String, Method> methodEntry : methods.entrySet()) {
             String property = methodEntry.getKey();
             Method method = methodEntry.getValue();
-            
-            Object sourceVal = ReflectUtils.tryInvoke(method, source);
-            Object targetVal = ReflectUtils.tryInvoke(method, target);
-            
+
+            Object sourceVal = propertyInvoker.invoke(property, method, source);
+            Object targetVal = propertyInvoker.invoke(property, method, target);
+
             for (PropertyComparator comparator : propertyComparators) {
                 if (comparator.canCompare(property, method)) {
                     if (comparator.compare(sourceVal, targetVal) != 0) {

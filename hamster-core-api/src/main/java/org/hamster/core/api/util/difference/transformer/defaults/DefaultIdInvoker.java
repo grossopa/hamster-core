@@ -10,7 +10,7 @@ import org.hamster.core.api.util.ReflectUtils;
 import org.hamster.core.api.util.difference.transformer.IdInvoker;
 
 /**
- * Defaultly to get id from object
+ * get id from object by idProperty
  * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0

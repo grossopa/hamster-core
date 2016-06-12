@@ -6,6 +6,7 @@ package org.hamster.core.api.util.difference.merger;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -38,5 +39,5 @@ public interface Merger<K, T> {
      * @param source
      * @param changed
      */
-    void mergeChanged(Pair<Method, Method> method, T source, T changed);
+    void mergeChanged(Map<String, Pair<Method, Method>> method, Set<String> changedProperties, T source, T changed);
 }

@@ -6,6 +6,8 @@ package org.hamster.core.api.util.difference.comparator.defaults;
 import java.lang.reflect.Method;
 
 /**
+ * Compare objects excludes {@link Iterable}
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
