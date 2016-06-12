@@ -38,7 +38,7 @@
     <jackson.version>2.6.3</jackson.version>
 
     <!-- Cache -->
-    <ehcache.version>2.10.1</ehcache.version>
+    <ehcache.version>2.10.2</ehcache.version>
 
     <!-- Security -->
     <shiro.version>1.2.4</shiro.version>
@@ -256,7 +256,7 @@
       <!-- Cache -->
       <dependency>
         <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache-core</artifactId>
+        <artifactId>ehcache</artifactId>
         <version>${ehcache.version}</version>
       </dependency>
       <!-- Cache End -->
