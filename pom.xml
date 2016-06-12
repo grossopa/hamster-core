@@ -76,7 +76,7 @@
     <servlet-api.version>2.5</servlet-api.version>
 
     <!-- maven plugin settings -->
-    <maven.version>3.3.9</maven.version>
+    <maven.version>[3.0.0,)</maven.version>
     <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
     <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
     <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
