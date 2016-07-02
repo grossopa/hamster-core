@@ -8,14 +8,16 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
-import org.hamster.core.api.util.difference.comparator.defaults.NumberComparator;
 import org.hamster.core.api.util.difference.comparator.defaults.ObjectComparator;
+import org.hamster.core.api.util.difference.comparator.defaults.SimpleCollectionComparator;
+import org.hamster.core.api.util.difference.internal.children.ChildCheckerManager;
 import org.hamster.core.api.util.difference.internal.executors.CheckerExecutor;
 import org.hamster.core.api.util.difference.internal.executors.MergerExecutor;
 import org.hamster.core.api.util.difference.internal.model.ExecutorResult;
 import org.hamster.core.api.util.difference.merger.Merger;
 import org.hamster.core.api.util.difference.merger.defaults.DefaultMerger;
 import org.hamster.core.api.util.difference.model.DiffObjectVO;
+import org.hamster.core.api.util.difference.model.DiffPath;
 import org.hamster.core.api.util.difference.model.DiffResultVO;
 import org.hamster.core.api.util.difference.model.DiffType;
 import org.hamster.core.api.util.difference.model.mapper.DiffObjectVOMapper;
@@ -26,6 +28,7 @@ import org.hamster.core.api.util.difference.transformer.defaults.DefaultProperty
 import org.hamster.core.api.util.difference.walker.Walker;
 import org.hamster.core.api.util.difference.walker.defaults.DefaultWalker;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -38,8 +41,6 @@ import lombok.Setter;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@Getter
-@Setter
 public class DiffChecker<K, T> {
 
     /**
@@ -49,6 +50,8 @@ public class DiffChecker<K, T> {
      * Default value is "id"
      * </p>
      */
+    @Getter
+    @Setter
     private String idProperty;
 
     /**
@@ -61,6 +64,8 @@ public class DiffChecker<K, T> {
      * {@link #getIdProperty()} cannot be excluded
      * </p>
      */
+    @Getter
+    @Setter
     private boolean exclude = true;
 
     /**
@@ -73,6 +78,8 @@ public class DiffChecker<K, T> {
      * {@link #getIdProperty()} cannot be excluded
      * </p>
      */
+    @Getter
+    @Setter
     private String[] properties;
 
     /**
@@ -82,6 +89,8 @@ public class DiffChecker<K, T> {
      * Default value is {@link DefaultWalker}
      * </p>
      */
+    @Getter
+    @Setter
     private Walker<K, T> walker;
 
     /**
@@ -91,6 +100,8 @@ public class DiffChecker<K, T> {
      * Default value is {@link DefaultMerger}
      * </p>
      */
+    @Getter
+    @Setter
     private Merger<K, T> merger;
 
     /**
@@ -100,6 +111,8 @@ public class DiffChecker<K, T> {
      * Default value is {@link DefaultIdInvoker}
      * </p>
      */
+    @Getter
+    @Setter
     private IdInvoker<K, T> idInvoker;
 
     /**
@@ -109,8 +122,10 @@ public class DiffChecker<K, T> {
      * Default value is {@link DefaultPropertyInvoker}
      * </p>
      */
+    @Getter
+    @Setter
     private PropertyInvoker<T> propertyInvoker;
-
+    
     /**
      * compare properties with order, see {@link PropertyComparator} for details
      * 
@@ -118,8 +133,10 @@ public class DiffChecker<K, T> {
      * {@link NumberComparator} and {@link ObjectComparator} are the last two items
      * </p>
      */
+    @Getter
+    @Setter
     private List<PropertyComparator> propertyComparators;
-
+    
     /**
      * Check and get the difference details between two collections.
      * 
@@ -201,8 +218,8 @@ public class DiffChecker<K, T> {
         }
 
         // add default ones
-        config.getPropertyComparators().add(new NumberComparator());
         config.getPropertyComparators().add(new ObjectComparator());
+        config.getPropertyComparators().add(new SimpleCollectionComparator());
 
         if (walker == null) {
             config.setWalker(new DefaultWalker<K, T>(config.getIdInvoker(), config.getPropertyInvoker(), config.getPropertyComparators()));
@@ -269,5 +286,16 @@ public class DiffChecker<K, T> {
          */
         private List<PropertyComparator> propertyComparators;
     }
-
+    
+    private final ChildCheckerManager childrenCheckerManager = new ChildCheckerManager();
+    
+    /**
+     * Delegate of {@link ChildCheckerManager#registerChecker(Function, DiffChecker)}
+     * 
+     * @param canCheckFunction
+     * @param checker
+     */
+    public void registerChecker(Function<DiffPath, Boolean> canCheckFunction, DiffChecker<?, ?> checker) {
+        this.childrenCheckerManager.registerChecker(canCheckFunction, checker);
+    }
 }

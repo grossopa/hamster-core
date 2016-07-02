@@ -181,7 +181,7 @@ public class DiffObjectVOMapper<K, T> {
                 return result == 0;
             }
         }
-        // cannot compare, defaultly as true
+        // cannot compare, default as true
         return true;
     }
 }

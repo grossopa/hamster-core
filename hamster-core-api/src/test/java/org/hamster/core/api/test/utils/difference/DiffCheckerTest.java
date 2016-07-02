@@ -76,6 +76,10 @@ public class DiffCheckerTest {
 
         for (DiffObjectVO object : diffResultList) {
             Asserts.assertNotEquals("AAA001", object.getId());
+            
+            for (Map.Entry<String, DiffVO> entry : object.getPropertyList().entrySet()) {
+                Asserts.assertEquals(entry.getKey(), entry.getValue().getProperty());
+            }
 
             if (object.getType() == DiffType.ADD) {
                 if ("AAA004".equals(object.getId())) {
@@ -415,7 +419,7 @@ public class DiffCheckerTest {
     public static class Dog {
         private String id;
         private String name;
-        private Integer length;
+        private int length;
     }
     
 

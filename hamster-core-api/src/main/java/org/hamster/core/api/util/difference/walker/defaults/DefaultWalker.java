@@ -91,7 +91,7 @@ public class DefaultWalker<K, T> implements Walker<K, T> {
 
             Object sourceVal = propertyInvoker.invoke(property, method, source);
             Object targetVal = propertyInvoker.invoke(property, method, target);
-
+            
             for (PropertyComparator comparator : propertyComparators) {
                 if (comparator.canCompare(property, method)) {
                     if (comparator.compare(sourceVal, targetVal) != 0) {
