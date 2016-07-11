@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
 import org.hamster.core.api.util.difference.comparator.defaults.ObjectComparator;
 import org.hamster.core.api.util.difference.comparator.defaults.SimpleCollectionComparator;
-import org.hamster.core.api.util.difference.internal.children.ChildCheckerManager;
+import org.hamster.core.api.util.difference.internal.children.CheckerWrapper;
 import org.hamster.core.api.util.difference.internal.executors.CheckerExecutor;
 import org.hamster.core.api.util.difference.internal.executors.MergerExecutor;
 import org.hamster.core.api.util.difference.internal.model.ExecutorResult;
@@ -20,6 +20,7 @@ import org.hamster.core.api.util.difference.model.DiffObjectVO;
 import org.hamster.core.api.util.difference.model.DiffPath;
 import org.hamster.core.api.util.difference.model.DiffResultVO;
 import org.hamster.core.api.util.difference.model.DiffType;
+import org.hamster.core.api.util.difference.model.DiffVO;
 import org.hamster.core.api.util.difference.model.mapper.DiffObjectVOMapper;
 import org.hamster.core.api.util.difference.transformer.IdInvoker;
 import org.hamster.core.api.util.difference.transformer.PropertyInvoker;
@@ -125,7 +126,7 @@ public class DiffChecker<K, T> {
     @Getter
     @Setter
     private PropertyInvoker<T> propertyInvoker;
-    
+
     /**
      * compare properties with order, see {@link PropertyComparator} for details
      * 
@@ -136,7 +137,25 @@ public class DiffChecker<K, T> {
     @Getter
     @Setter
     private List<PropertyComparator> propertyComparators;
-    
+
+    /**
+     * Compares children properties / collections by another checker<br>
+     * Produces {@link DiffVO} or {@link DiffObjectVO} depends on the type of property
+     */
+    @Getter
+    @Setter
+    private List<CheckerWrapper> childCheckerWrappers = Lists.newArrayList();
+
+    /**
+     * register checker wrappers for children property and collection
+     * 
+     * @param canCheckFunction
+     * @param checker
+     */
+    public void registerChecker(Function<DiffPath, Boolean> canCheckFunction, DiffChecker<?, ?> checker, Class<?> type) {
+        childCheckerWrappers.add(new CheckerWrapper(canCheckFunction, checker, type));
+    }
+
     /**
      * Check and get the difference details between two collections.
      * 
@@ -149,7 +168,7 @@ public class DiffChecker<K, T> {
      * @return list of {@link DiffObjectVO} contains the details of difference
      * @throws DiffCheckerException
      */
-    public DiffResultVO<K, T> check(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) throws DiffCheckerException {
+    public DiffResultVO<K, T> check(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) {
         // ensure walker and merger are valid
         Config<K, T> config = validateConfig();
 
@@ -159,7 +178,7 @@ public class DiffChecker<K, T> {
 
         // map result into list of {@link DiffObjectVO}
         DiffObjectVOMapper<K, T> objectVOMapper = new DiffObjectVOMapper<K, T>(config.getIdInvoker(), config.getPropertyInvoker(),
-                result.getMethods(), config.getPropertyComparators());
+                result.getMethods(), config.getPropertyComparators(), config.getChildCheckerWrappers());
         List<DiffObjectVO> addedDiffObjects = objectVOMapper.mapAddedColl(result.getAddedColl());
         List<DiffObjectVO> removedDiffObjects = objectVOMapper.mapRemovedColl(result.getRemovedColl());
         List<DiffObjectVO> changedDiffObjects = objectVOMapper.mapChangedColl(result.getChangedColl());
@@ -200,6 +219,7 @@ public class DiffChecker<K, T> {
         config.setPropertyComparators(propertyComparators);
         config.setPropertyInvoker(propertyInvoker);
         config.setWalker(walker);
+        config.setChildCheckerWrappers(childCheckerWrappers);
 
         if (StringUtils.isBlank(idProperty)) {
             config.setIdProperty("id");
@@ -231,6 +251,10 @@ public class DiffChecker<K, T> {
 
         if (properties == null) {
             config.setProperties(new String[] {});
+        }
+
+        if (childCheckerWrappers == null) {
+            config.setChildCheckerWrappers(Lists.<CheckerWrapper> newArrayList());
         }
 
         return config;
@@ -285,17 +309,10 @@ public class DiffChecker<K, T> {
          * @see DiffChecker#propertyComparators
          */
         private List<PropertyComparator> propertyComparators;
-    }
-    
-    private final ChildCheckerManager childrenCheckerManager = new ChildCheckerManager();
-    
-    /**
-     * Delegate of {@link ChildCheckerManager#registerChecker(Function, DiffChecker)}
-     * 
-     * @param canCheckFunction
-     * @param checker
-     */
-    public void registerChecker(Function<DiffPath, Boolean> canCheckFunction, DiffChecker<?, ?> checker) {
-        this.childrenCheckerManager.registerChecker(canCheckFunction, checker);
+
+        /**
+         * @see DiffChecker#childCheckerWrappers
+         */
+        private List<CheckerWrapper> childCheckerWrappers;
     }
 }

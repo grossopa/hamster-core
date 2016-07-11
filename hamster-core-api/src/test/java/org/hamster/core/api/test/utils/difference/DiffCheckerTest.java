@@ -78,6 +78,10 @@ public class DiffCheckerTest {
             Asserts.assertNotEquals("AAA001", object.getId());
             
             for (Map.Entry<String, DiffVO> entry : object.getPropertyList().entrySet()) {
+                if ( entry.getValue().getProperty() == null) {
+                    System.out.println(entry.getValue());
+                    System.out.println(object.getPropertyList());
+                }
                 Asserts.assertEquals(entry.getKey(), entry.getValue().getProperty());
             }
 
@@ -391,11 +395,6 @@ public class DiffCheckerTest {
                 return Sets.newHashSet();
             }
 
-            @Override
-            public Set<String> walkCollection(Dog source, Dog target, Map<String, Method> methods) {
-                return null;
-            }
-            
         });
         DiffResultVO<String, Dog> result = checker.check(Dog.class, list1, list2);
         
@@ -403,15 +402,32 @@ public class DiffCheckerTest {
         Asserts.assertTrue(result.getRemovedColl().isEmpty());
         Asserts.assertEquals(0, result.getChangedColl().size());
     }
+    
+    @Test
+    public void testSimpleCollection() {
+        Dog d = new Dog("1", "1", 1);
+        List<Person> p1 = Lists.newArrayList(
+                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow1", "Snow2"))
+                );
+        List<Person> p2 = Lists.newArrayList(
+                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow2", "Snow1"))
+                );
+        
+        DiffChecker<Long, Person> checker = new DiffChecker<Long, Person>();
+        DiffResultVO<Long, Person> result = checker.check(Person.class, p1, p2);
+        Asserts.assertFalse(result.hasChange());
+    }
 
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Person {
         private Long id;
         private String name;
         private Double money;
         private boolean male;
         private Dog dog;
+        private List<String> alias;
     }
 
     @Data
@@ -422,5 +438,4 @@ public class DiffCheckerTest {
         private int length;
     }
     
-
 }

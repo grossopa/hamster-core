@@ -22,5 +22,4 @@ public class SimpleCollectionComparator extends AbstractCollectionComparator {
     protected int compareListObjects(Object o1, Object o2) {
         return objectComparator.compare(o1, o2);
     }
-
 }

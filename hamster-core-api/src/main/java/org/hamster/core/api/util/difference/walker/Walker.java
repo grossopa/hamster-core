@@ -42,14 +42,4 @@ public interface Walker<K, T> {
      * @return different property name
      */
     Set<String> walkProperty(T source, T target, Map<String, Method> methods);
-
-    /**
-     * find collections for recursively go into
-     * 
-     * @param source
-     * @param target
-     * @param methods
-     * @return properties of collection need to go into
-     */
-    Set<String> walkCollection(T source, T target, Map<String, Method> methods);
 }

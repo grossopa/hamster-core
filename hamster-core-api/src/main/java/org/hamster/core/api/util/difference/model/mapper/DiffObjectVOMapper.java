@@ -10,7 +10,10 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamster.core.api.util.difference.comparator.PropertyComparator;
+import org.hamster.core.api.util.difference.internal.children.CheckerWrapper;
+import org.hamster.core.api.util.difference.model.DiffCollVO;
 import org.hamster.core.api.util.difference.model.DiffObjectVO;
+import org.hamster.core.api.util.difference.model.DiffResultVO;
 import org.hamster.core.api.util.difference.model.DiffType;
 import org.hamster.core.api.util.difference.model.DiffVO;
 import org.hamster.core.api.util.difference.transformer.IdInvoker;
@@ -35,6 +38,8 @@ public class DiffObjectVOMapper<K, T> {
 
     private final List<PropertyComparator> propertyComparators;
 
+    private final List<CheckerWrapper> childCheckerWrappers;
+
     /**
      * constructor, idInvoker and propertyInvoker must be non-null
      * 
@@ -44,11 +49,12 @@ public class DiffObjectVOMapper<K, T> {
      *            property/method pair, getter method must be no arguments
      */
     public DiffObjectVOMapper(IdInvoker<K, T> idInvoker, PropertyInvoker<T> propertyInvoker, Map<String, Method> methods,
-            List<PropertyComparator> propertyComparators) {
+            List<PropertyComparator> propertyComparators, List<CheckerWrapper> childCheckerWrappers) {
         this.idInvoker = idInvoker;
         this.propertyInvoker = propertyInvoker;
         this.methods = methods;
         this.propertyComparators = propertyComparators;
+        this.childCheckerWrappers = childCheckerWrappers;
     }
 
     /**
@@ -87,7 +93,6 @@ public class DiffObjectVOMapper<K, T> {
             T removedItem = entry.getValue();
 
             DiffObjectVO vo = new DiffObjectVO();
-            // here id could not be null ideally
             vo.setId(key);
             vo.setType(DiffType.REMOVAL);
             vo.setPropertyList(mapAddOrRemovedToPropertyList(removedItem, DiffType.REMOVAL));
@@ -111,7 +116,6 @@ public class DiffObjectVOMapper<K, T> {
             T targetItem = entry.getValue().getRight();
 
             DiffObjectVO vo = new DiffObjectVO();
-            // here id could not be null ideally
             vo.setId(key);
             vo.setType(DiffType.CHANGE);
             vo.setPropertyList(mapChangedToPropertyList(sourceItem, targetItem));
@@ -154,9 +158,12 @@ public class DiffObjectVOMapper<K, T> {
         return result;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Map<String, DiffVO> mapChangedToPropertyList(T source, T target) {
         Map<String, DiffVO> result = Maps.newHashMap();
         for (Map.Entry<String, Method> entry : methods.entrySet()) {
+            DiffVO vo = null;
+
             String property = entry.getKey();
             Method method = entry.getValue();
 
@@ -164,10 +171,36 @@ public class DiffObjectVOMapper<K, T> {
             Object targetValue = propertyInvoker.invoke(property, method, target);
 
             if (!compareProperty(property, method, sourceValue, targetValue)) {
-                DiffVO vo = new DiffVO();
+                vo = new DiffVO();
                 vo.setProperty(property);
                 vo.setOldValue(sourceValue);
                 vo.setNewValue(targetValue);
+            }
+
+            // map children
+            for (CheckerWrapper wrapper : childCheckerWrappers) {
+                if (wrapper.getCanCheckFunction().apply(null)) {
+                    DiffResultVO<?, ?> childResultVO = wrapper.getChecker().check(wrapper.getType(), (Collection) sourceValue,
+                            (Collection) targetValue);
+                    if (childResultVO.hasChange()) {
+                        DiffCollVO collVO = new DiffCollVO();
+                        collVO.setProperty(property);
+                        collVO.setOldValue(sourceValue);
+                        collVO.setNewValue(targetValue);
+                        collVO.setProperties(childResultVO.getProperties());
+                        for (Map.Entry<DiffType, List<DiffObjectVO>> childObject : childResultVO.getResults().entrySet()) {
+                            collVO.getObjectList().addAll(childObject.getValue());
+                        }
+                        vo = collVO;
+                    } else {
+                        // It's possible that simple equal detect the sub collections are different but
+                        // actually they are same.
+                        vo = null;
+                    }
+                }
+            }
+
+            if (vo != null) {
                 result.put(property, vo);
             }
         }
@@ -177,8 +210,7 @@ public class DiffObjectVOMapper<K, T> {
     private boolean compareProperty(String property, Method getterMethod, Object sourceValue, Object targetValue) {
         for (PropertyComparator comparator : propertyComparators) {
             if (comparator.canCompare(property, getterMethod)) {
-                int result = comparator.compare(sourceValue, targetValue);
-                return result == 0;
+                return comparator.compare(sourceValue, targetValue) == 0;
             }
         }
         // cannot compare, default as true

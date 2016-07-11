@@ -5,6 +5,7 @@ package org.hamster.core.api.util.difference.internal.executors;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,9 +16,12 @@ import org.hamster.core.api.util.ReflectUtils;
 import org.hamster.core.api.util.difference.DiffChecker;
 import org.hamster.core.api.util.difference.DiffChecker.Config;
 import org.hamster.core.api.util.difference.DiffCheckerException;
+import org.hamster.core.api.util.difference.internal.children.CheckerWrapper;
 import org.hamster.core.api.util.difference.internal.model.ExecutorResult;
 import org.hamster.core.api.util.difference.model.DiffObjectVO;
+import org.hamster.core.api.util.difference.model.DiffPath;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -30,6 +34,7 @@ import com.google.common.collect.Sets;
 public class CheckerExecutor<K, T> {
 
     private final Config<K, T> config;
+    private final DiffPath parentPath;
 
     /**
      * Constructor
@@ -38,6 +43,12 @@ public class CheckerExecutor<K, T> {
      */
     public CheckerExecutor(Config<K, T> config) {
         this.config = config;
+        this.parentPath = null;
+    }
+    
+    public CheckerExecutor(Config<K, T> config, DiffPath parentPath) {
+        this.config = config;
+        this.parentPath = parentPath;
     }
 
     /**
@@ -52,7 +63,7 @@ public class CheckerExecutor<K, T> {
      * @return list of {@link DiffObjectVO} contains the details of difference
      * @throws DiffCheckerException
      */
-    public ExecutorResult<K, T> doCheck(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) throws DiffCheckerException {
+    public ExecutorResult<K, T> doCheck(Class<T> clazz, Collection<T> sourceColl, Collection<T> targetColl) {
         Map<String, Method> methods = findProperties(clazz);
 
         Map<K, T> sourceMap = toMap(methods, sourceColl);
@@ -67,12 +78,14 @@ public class CheckerExecutor<K, T> {
         Map<K, Pair<T, T>> changedColl = Maps.newHashMap();
         for (T target : targetColl) {
             K id = config.getIdInvoker().invoke(methods, target);
-            if (sourceMap.containsKey(id)) {
-                T source = sourceMap.get(id);
-                Set<String> changedProperties = config.getWalker().walkProperty(source, target, methods);
-                if (CollectionUtils.isNotEmpty(changedProperties)) {
-                    changedColl.put(id, new ImmutablePair<T, T>(source, target));
-                }
+            if (!sourceMap.containsKey(id)) {
+                continue;
+            }
+            T source = sourceMap.get(id);
+            
+            Set<String> changedProperties = config.getWalker().walkProperty(source, target, methods);
+            if (CollectionUtils.isNotEmpty(changedProperties)) {
+                changedColl.put(id, new ImmutablePair<T, T>(source, target));
             }
         }
 
@@ -83,7 +96,7 @@ public class CheckerExecutor<K, T> {
         result.setChangedColl(changedColl);
         return result;
     }
-
+    
     /**
      * find interested getter methods from class
      * 
@@ -114,5 +127,20 @@ public class CheckerExecutor<K, T> {
         }
 
         return result;
+    }
+    
+    /**
+     * Finds available checkers by calling canCheckFunction {@link Function#apply(DiffPath)}
+     * 
+     * @param path
+     * @return the checker or null if none found
+     */
+    public DiffChecker<?, ?> findChecker(DiffPath path, List<CheckerWrapper> wrappers) {
+        for (CheckerWrapper wrapper : wrappers) {
+            if (wrapper.getCanCheckFunction().apply(path)) {
+                return wrapper.getChecker();
+            }
+        }
+        return null;
     }
 }

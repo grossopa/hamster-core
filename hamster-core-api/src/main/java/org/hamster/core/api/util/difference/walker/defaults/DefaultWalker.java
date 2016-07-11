@@ -91,7 +91,7 @@ public class DefaultWalker<K, T> implements Walker<K, T> {
 
             Object sourceVal = propertyInvoker.invoke(property, method, source);
             Object targetVal = propertyInvoker.invoke(property, method, target);
-            
+
             for (PropertyComparator comparator : propertyComparators) {
                 if (comparator.canCompare(property, method)) {
                     if (comparator.compare(sourceVal, targetVal) != 0) {
@@ -104,14 +104,5 @@ public class DefaultWalker<K, T> implements Walker<K, T> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.hamster.core.api.util.difference.walker.Walker#walkCollection(java.lang.Object, java.lang.Object, java.util.Map)
-     */
-    @Override
-    public Set<String> walkCollection(T source, T target, Map<String, Method> methods) {
-        return null;
-    }
 
 }

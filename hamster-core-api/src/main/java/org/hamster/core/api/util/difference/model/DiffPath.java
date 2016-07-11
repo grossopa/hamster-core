@@ -7,6 +7,7 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
@@ -14,6 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class DiffPath {
     /**
      * property name
