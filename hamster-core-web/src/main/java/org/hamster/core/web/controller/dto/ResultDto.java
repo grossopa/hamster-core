@@ -40,4 +40,8 @@ public class ResultDto<T> {
         return dto;
     }
 
+    public static final <U> ResultDto<U> of(U data) {
+        return of(null, data);
+    }
+
 }
