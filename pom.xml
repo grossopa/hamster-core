@@ -18,7 +18,7 @@
     <!-- core settings -->
     <java.version>1.7</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <hamster.project.version>0.0.1-SNAPSHOT</hamster.project.version>
+    <hamster.project.version>1.0.0-SNAPSHOT</hamster.project.version>
 
     <!-- Spring -->
     <spring.version>4.2.3.RELEASE</spring.version>

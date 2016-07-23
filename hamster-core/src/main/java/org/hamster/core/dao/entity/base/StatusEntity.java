@@ -18,11 +18,12 @@ import org.hibernate.validator.constraints.NotBlank;
  * @version 1.0
  */
 @MappedSuperclass
-@Where(clause = "status == 'ACTIVE'")
+@Where(clause = StatusEntity.WHERE_ACTIVE)
 public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
 
     public static final String PROP_STATUS = "status";
     public static final String COL_STATUS = "_status";
+    public static final String WHERE_ACTIVE = "where status = 'ACTIVE'";
 
     @Length(max = 20)
     @NotBlank
