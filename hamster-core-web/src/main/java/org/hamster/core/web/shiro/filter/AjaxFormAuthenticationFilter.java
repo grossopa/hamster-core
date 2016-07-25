@@ -7,17 +7,17 @@ import java.io.IOException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.hamster.mobile.constant.StatusCode;
-import org.hamster.mobile.model.vo.ErrorVO;
-import org.hamster.mobile.model.vo.RespVO;
-import org.hamster.mobile.util.JsonUtils;
-import org.hamster.mobile.util.Msgs;
+import org.hamster.core.api.util.JsonUtils;
+import org.hamster.core.web.controller.dto.ErrorDto;
+import org.hamster.core.web.controller.dto.ResultDto;
+import org.hamster.core.web.shiro.authc.HttpUsernamePasswordToken;
+import org.hamster.core.web.shiro.util.ShiroFilterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class AjaxFormAuthenticationFilter extends FormAuthenticationFilter {
             return super.onLoginSuccess(token, subject, request, response);
         }
 
-        JsonUtils.toJson(RespVO.success(), response.getWriter());
+        JsonUtils.toJson(ResultDto.of("Success"), response.getWriter());
         return false;
     }
 
@@ -56,18 +56,7 @@ public class AjaxFormAuthenticationFilter extends FormAuthenticationFilter {
         response.setCharacterEncoding("UTF-8");
         try {
             String message = e.getClass().getSimpleName();
-
-            ErrorVO result = null;
-            if ("IncorrectCredentialsException".equals(message)) {
-                result = ErrorVO.error(StatusCode.LOGIN_PASSWORD_WRONG, Msgs.get(Msgs.STATUS_LOGIN_PASSWORD_WRONG));
-            } else if ("UnknownAccountException".equals(message)) {
-                result = ErrorVO.error(StatusCode.LOGIN_USERNAME_WRONG, Msgs.get(Msgs.STATUS_LOGIN_USERNAME_WRONG));
-            } else if ("LockedAccountException".equals(message)) {
-                result = ErrorVO.error(StatusCode.LOGIN_USER_BLOCKED, Msgs.get(Msgs.STATUS_LOGIN_USER_BLOCKED));
-            } else {
-                result = ErrorVO.error(StatusCode.ERROR, Msgs.get(Msgs.STATUS_ERROR));
-            }
-            JsonUtils.toJson(result, response.getWriter());
+            JsonUtils.toJson(ErrorDto.of(message), response.getWriter());
             return false;
         } catch (IOException e1) {
             log.error(e1.getMessage(), e1);
@@ -85,35 +74,31 @@ public class AjaxFormAuthenticationFilter extends FormAuthenticationFilter {
                 return executeLogin(request, response);
             } else {
                 response.setCharacterEncoding("UTF-8");
-                ErrorVO result = ErrorVO.error(StatusCode.LOGIN_REQUIRE_LOGIN, Msgs.get(Msgs.STATUS_LOGIN_REQUIRE_LOGIN));
-                JsonUtils.toJson(result, response.getWriter());
+                JsonUtils.toJson(ErrorDto.of("login failed"), response.getWriter());
                 return false;
             }
         } else {
             response.setCharacterEncoding("UTF-8");
-            ErrorVO result = ErrorVO.error(StatusCode.LOGIN_PASSWORD_WRONG, Msgs.get(Msgs.STATUS_LOGIN_PASSWORD_WRONG));
-            JsonUtils.toJson(result, response.getWriter());
+            JsonUtils.toJson(ErrorDto.of("login failed"), response.getWriter());
             return false;
         }
-    }
-
-    @Override
-    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-        String username = getUsername(request);
-        String password = getPassword(request);
-        return createToken(username, password, request, response);
     }
 
     @Override
     protected AuthenticationToken createToken(String username, String password, ServletRequest request, ServletResponse response) {
         boolean rememberMe = isRememberMe(request);
         String host = getHost(request);
-        return createToken(username, password, rememberMe, host);
+        if (request instanceof HttpServletRequest) {
+            return createHttpToken(username, password, rememberMe, host, (HttpServletRequest) request);
+        } else {
+            return super.createToken(username, password, rememberMe, host);
+        }
     }
 
-    @Override
-    protected AuthenticationToken createToken(String username, String password, boolean rememberMe, String host) {
-        return new UsernamePasswordToken(username, password, rememberMe, host);
+    protected AuthenticationToken createHttpToken(String username, String password, boolean rememberMe, String host, HttpServletRequest httpRequest) {
+        HttpUsernamePasswordToken token = new HttpUsernamePasswordToken(username, password, rememberMe, host);
+        token.enrich(httpRequest);
+        return token;
     }
 
 }
