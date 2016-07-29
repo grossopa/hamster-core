@@ -3,6 +3,8 @@
  */
 package org.hamster.core.web.spring.interceptor;
 
+import java.text.MessageFormat;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -55,7 +57,7 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
      * @param time
      */
     public void logAccessTime(Logger log, Long time, HttpServletRequest request) {
-        log.info("User {} {} ms, URI : {}", getUserName(), time, getRequestURI(request));
+        log.info(MessageFormat.format("User {0} {1} ms, URI : {2}", getUserName(), time, getRequestURI(request)));
     }
 
     /**

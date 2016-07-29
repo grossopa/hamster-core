@@ -40,26 +40,6 @@ public class HttpUsernamePasswordToken extends UsernamePasswordToken {
     private Map<String, String> headers;
 
     /**
-     * set cookies and headers
-     * 
-     * @param request
-     */
-    @SuppressWarnings("unchecked")
-    public void enrich(HttpServletRequest request) {
-        cookies = ImmutableSet.copyOf(request.getCookies());
-
-        Map<String, String> temp = Maps.newHashMap();
-        Enumeration<String> headerKeys = request.getHeaderNames();
-        while (headerKeys.hasMoreElements()) {
-            String headerKey = headerKeys.nextElement();
-            temp.put(headerKey, request.getHeader(headerKey));
-        }
-
-        headers = ImmutableMap.copyOf(temp);
-
-    }
-
-    /**
      * 
      */
     public HttpUsernamePasswordToken() {
@@ -136,6 +116,38 @@ public class HttpUsernamePasswordToken extends UsernamePasswordToken {
      */
     public HttpUsernamePasswordToken(String username, String password) {
         super(username, password);
+    }
+
+    /**
+     * set cookies and headers
+     * 
+     * @param request
+     */
+    @SuppressWarnings("unchecked")
+    public void enrich(HttpServletRequest request) {
+        cookies = ImmutableSet.copyOf(request.getCookies());
+
+        Map<String, String> temp = Maps.newHashMap();
+        Enumeration<String> headerKeys = request.getHeaderNames();
+        while (headerKeys.hasMoreElements()) {
+            String headerKey = headerKeys.nextElement();
+            temp.put(headerKey, request.getHeader(headerKey));
+        }
+
+        headers = ImmutableMap.copyOf(temp);
+    }
+    
+    public String getHeader(String name) {
+        return headers.get(name);
+    }
+    
+    public Cookie getCookie(String name) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
+                return cookie;
+            }
+        }
+        return null;
     }
 
 }
