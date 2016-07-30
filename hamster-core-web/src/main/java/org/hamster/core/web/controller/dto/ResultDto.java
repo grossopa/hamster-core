@@ -15,9 +15,18 @@ import lombok.Setter;
 public class ResultDto<T> {
     private String message;
     private T data;
+    
+    /**
+     * Create an instance of {@link ResultDto} with no message and no data returns
+     * 
+     * @return
+     */
+    public static final ResultDto<Void> of() {
+        return ResultDto.<Void> of("", null);
+    }
 
     /**
-     * Create an instance of {@link ResultDto} with no data returned
+     * Create an instance of {@link ResultDto} with no data returns
      * 
      * @param message
      * @return
@@ -41,7 +50,7 @@ public class ResultDto<T> {
     }
 
     public static final <U> ResultDto<U> of(U data) {
-        return of(null, data);
+        return of("", data);
     }
 
 }
