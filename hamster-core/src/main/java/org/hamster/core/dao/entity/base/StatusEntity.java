@@ -27,7 +27,7 @@ public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
 
     @Length(max = 20)
     @NotBlank
-    @Column(name = COL_STATUS, length = 20, nullable = true, columnDefinition = "default 'ACTIVE'")
+    @Column(name = COL_STATUS, length = 20, nullable = true, columnDefinition = "VARCHAR(20) DEFAULT 'ACTIVE'")
     private String status;
 
     /*
