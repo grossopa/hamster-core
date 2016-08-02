@@ -36,6 +36,7 @@
 
     <!-- Data Transfer -->
     <jackson.version>2.6.3</jackson.version>
+    <poi.version>3.14</poi.version>
 
     <!-- Cache -->
     <ehcache.version>2.10.2</ehcache.version>
@@ -56,6 +57,7 @@
     <commons-lang3.version>3.4</commons-lang3.version>
     <commons-io.version>2.4</commons-io.version>
     <commons-collections4.version>4.1</commons-collections4.version>
+    <commons-codec.version>1.10</commons-codec.version>
     <guava.version>18.0</guava.version>
     <lombok.version>1.16.8</lombok.version>
 
@@ -253,6 +255,19 @@
         <version>${jackson.version}</version>
       </dependency>
       <!-- Data Transfer Jackson End -->
+
+      <!-- Data Transfer POI -->
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>${poi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>${poi.version}</version>
+      </dependency>
+      <!-- Data Transfer POI End -->
 
       <!-- Cache -->
       <dependency>

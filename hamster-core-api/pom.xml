@@ -60,6 +60,19 @@
     </dependency>
     <!-- Data Transfer Jackson End -->
 
+    <!-- Data Transfer POI -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${poi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${poi.version}</version>
+    </dependency>
+    <!-- Data Transfer POI End -->
+
     <!-- Utilities -->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -87,7 +100,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.hamster</groupId>
       <artifactId>hamster-core-test</artifactId>
     </dependency>
