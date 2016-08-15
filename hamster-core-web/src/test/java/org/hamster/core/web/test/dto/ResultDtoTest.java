@@ -3,7 +3,6 @@
  */
 package org.hamster.core.web.test.dto;
 
-import org.hamster.core.test.helper.DtoCoverager;
 import org.hamster.core.web.controller.dto.ResultDto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,8 +27,4 @@ public class ResultDtoTest {
         Assert.assertEquals(o, dto.getData());
     }
     
-    @Test
-    public void testCoverage() {
-        DtoCoverager.of(ResultDto.of("new message")).coverAll();
-    }
 }
