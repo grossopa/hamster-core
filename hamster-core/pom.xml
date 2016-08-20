@@ -15,35 +15,15 @@
       <artifactId>hamster-core-api</artifactId>
     </dependency>
 
-    <!-- Spring -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-    </dependency>
-
-    <!-- Hibernate -->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-envers</artifactId>
-    </dependency>
-
     <!-- Data accessing -->
     <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
     <!-- Utilities -->
