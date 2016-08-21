@@ -123,7 +123,6 @@ public class HttpUsernamePasswordToken extends UsernamePasswordToken {
      * 
      * @param request
      */
-    @SuppressWarnings("unchecked")
     public void enrich(HttpServletRequest request) {
         cookies = ImmutableSet.copyOf(request.getCookies());
 
