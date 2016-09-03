@@ -5,6 +5,7 @@ package org.hamster.core.web.spring.boot;
 
 import org.hamster.core.api.environment.initializer.DefaultEnvironmentContextInitializer;
 import org.hamster.core.web.spring.view.JsonViewResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import com.google.common.collect.Lists;
 
@@ -20,6 +22,9 @@ import com.google.common.collect.Lists;
  * @since 1.0
  */
 public abstract class AbstractApplication {
+
+    @Autowired
+    private ThymeleafViewResolver thymeleafViewResolver;
 
     /**
      * create an application and register default initializers
@@ -37,8 +42,8 @@ public abstract class AbstractApplication {
     public ContentNegotiatingViewResolver cnViewResolver() {
         ContentNegotiatingViewResolver cnResolver = new ContentNegotiatingViewResolver();
         cnResolver.setContentNegotiationManager(cnManagerFactoryBean().getObject());
-        cnResolver.setViewResolvers(
-                Lists.<ViewResolver>newArrayList(jsonViewResolver(), internalResourceViewResolver()));
+        thymeleafViewResolver.setOrder(20);
+        cnResolver.setViewResolvers(Lists.<ViewResolver> newArrayList(jsonViewResolver(), thymeleafViewResolver, internalResourceViewResolver()));
         return cnResolver;
     }
 
