@@ -39,6 +39,8 @@ public class DefaultExceptionConverterTest {
     public void testHandleServiceException() {
         ExceptionCode.register("code123", new ExceptionMetadata() {
 
+            private static final long serialVersionUID = -6172347072627464109L;
+
             @Override
             public String getMessage() {
                 return "No cow level";
