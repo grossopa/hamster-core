@@ -29,6 +29,9 @@ public abstract class EnvironmentContextInitializer implements ApplicationContex
         Environment env = getBuilder().build();
         
         Assert.notNull(env, "Environment variable from EnvironmentBuilder must be non-null!");
+        
+        Environment.initializeEnvironment(env);
+        
         System.setProperty(ENVIRONMENT, env.toString());
         System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, env.toString());
         System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, env.toString());
