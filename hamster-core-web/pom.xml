@@ -41,6 +41,16 @@
       <artifactId>thymeleaf-extras-data-attribute</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+
     <!-- Test -->
     <dependency>
       <groupId>org.hamster</groupId>

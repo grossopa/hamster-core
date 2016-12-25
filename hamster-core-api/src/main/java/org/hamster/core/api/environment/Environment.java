@@ -20,14 +20,22 @@ public enum Environment {
      * @param environment
      */
     public static void initializeEnvironment(Environment environment) {
-        if (currentEnvironment != null) {
-            throw new IllegalArgumentException("Environment already set");
-        }
-        synchronized (Environment.class) {
-            currentEnvironment = environment;
+        if (currentEnvironment != null && currentEnvironment != environment) {
+            throw new IllegalArgumentException("Environment already set to " + currentEnvironment + "Cannot be changed to " + environment);
+        } else if (currentEnvironment == null) {
+            synchronized (Environment.class) {
+                currentEnvironment = environment;
+            }
         }
     }
-    
+
+    /**
+     * Clean up current environment, only for testing propose
+     */
+    public static void cleanup() {
+        currentEnvironment = null;
+    }
+
     /**
      * returns current environment, throws exception if environment not set
      * 
@@ -39,7 +47,7 @@ public enum Environment {
         }
         return currentEnvironment;
     }
-    
+
     public static final boolean isProd() {
         return current() == Environment.PROD;
     }

@@ -11,6 +11,7 @@ import org.hamster.core.api.environment.initializer.LocalEnvironmentContextIniti
 import org.hamster.core.api.environment.initializer.UnknownEnvironmentContextInitializer;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.env.AbstractEnvironment;
 
@@ -19,12 +20,17 @@ import org.springframework.core.env.AbstractEnvironment;
  * @since 1.0
  */
 public class EnvironmentContextInitializerTest {
+    @Before
+    public void before() {
+        Environment.cleanup();
+    }
 
     @After
     public void after() {
         System.clearProperty(DefaultEnvironmentBuilder.ENVIRONMENT_VARIABLE);
         System.clearProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME);
         System.clearProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
+        Environment.cleanup();
     }
 
     @Test
@@ -40,7 +46,7 @@ public class EnvironmentContextInitializerTest {
         initializer.initialize(null);
         assertEnv(Environment.UNKNOWN.toString());
     }
-    
+
     @Test
     public void testDefaultInitializer() {
         EnvironmentContextInitializer initializer = new DefaultEnvironmentContextInitializer();
