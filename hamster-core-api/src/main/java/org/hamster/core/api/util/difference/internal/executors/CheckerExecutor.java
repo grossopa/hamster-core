@@ -34,7 +34,7 @@ import com.google.common.collect.Sets;
 public class CheckerExecutor<K, T> {
 
     private final Config<K, T> config;
-    private final DiffPath parentPath;
+    // private final DiffPath parentPath;
 
     /**
      * Constructor
@@ -43,12 +43,12 @@ public class CheckerExecutor<K, T> {
      */
     public CheckerExecutor(Config<K, T> config) {
         this.config = config;
-        this.parentPath = null;
+        //this.parentPath = null;
     }
     
     public CheckerExecutor(Config<K, T> config, DiffPath parentPath) {
         this.config = config;
-        this.parentPath = parentPath;
+        //this.parentPath = parentPath;
     }
 
     /**
