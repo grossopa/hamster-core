@@ -20,7 +20,7 @@ import lombok.Setter;
  * @since 1.0
  */
 public class EntityUtilsTest {
-
+    
     @Test
     public void testUpdateStatus() {
         TestEntity entity = new TestEntity();

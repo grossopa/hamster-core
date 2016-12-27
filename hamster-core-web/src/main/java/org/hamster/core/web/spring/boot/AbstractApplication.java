@@ -17,6 +17,8 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import com.google.common.collect.Lists;
 
+import lombok.Setter;
+
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
@@ -24,6 +26,7 @@ import com.google.common.collect.Lists;
 public abstract class AbstractApplication {
 
     @Autowired
+    @Setter
     private ThymeleafViewResolver thymeleafViewResolver;
 
     /**
