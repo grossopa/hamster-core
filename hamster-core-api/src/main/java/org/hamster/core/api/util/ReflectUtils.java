@@ -130,8 +130,6 @@ public final class ReflectUtils {
      * @return 
      */
     public static Set<Method> findMethodsByName(final Class<?> clazz, final String methodName) {
-        Assert.notNull(clazz);
-        Assert.notNull(methodName);
         Set<Method> result = Sets.newHashSet();
         for (Method method : clazz.getMethods()) {
             if (method.getName().equals(methodName)) {
@@ -362,8 +360,8 @@ public final class ReflectUtils {
      * @throws InvocationTargetException
      */
     public static <T> T invoke(String methodName, Object object, Object... args) throws IllegalAccessException, InvocationTargetException {
-        Assert.notNull(methodName);
-        Assert.notNull(object);
+        Assert.notNull(methodName, "params methodName is null");
+        Assert.notNull(object, "parameter object is null");
         Set<Method> methods = findMethodsByName(object.getClass(), methodName);
         Method method = findExecutableMethod(methods, args);
         if (method == null) {

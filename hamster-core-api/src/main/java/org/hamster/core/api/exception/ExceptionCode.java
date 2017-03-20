@@ -61,8 +61,8 @@ public class ExceptionCode implements Serializable {
      *            the code of the exception
      */
     ExceptionCode(String code, ExceptionMetadata metadata) {
-        Assert.hasText(code);
-        Assert.notNull(metadata);
+        Assert.hasText(code, "param code is null");
+        Assert.notNull(metadata, "param metadata is null");
         this.code = code;
         this.metadata = metadata;
     }
