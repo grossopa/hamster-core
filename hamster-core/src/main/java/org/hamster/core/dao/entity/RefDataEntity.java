@@ -13,17 +13,30 @@ import org.hamster.core.dao.entity.base.ManageableEntity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
+ * a ref data is for storing and managing the key / value pairs used in application.
+ * Usually the data size is not large and can be loaded into memory periodically. 
+ * Hence no index is required
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
 @Entity
 @Table(name = EntityConsts.DB_PREFIX + "ref_data")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefDataEntity extends ManageableEntity implements RefData {
     public static final String COL_KEY = "key_";
     public static final String COL_VALUE = "value_";
-    public static final String COL_LABEL = "label";
-    public static final String COL_ORDER = "order";
+    public static final String COL_LABEL = "label_";
+    public static final String COL_ORDER = "order_";
 
     @Length(max = 100)
     @NotBlank
@@ -40,66 +53,4 @@ public class RefDataEntity extends ManageableEntity implements RefData {
 
     @Column(name = COL_ORDER, nullable = true)
     private Integer order;
-
-    /**
-     * @return the key
-     */
-
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * @return the label
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * @return the order
-     */
-    public Integer getOrder() {
-        return order;
-    }
-
-    /**
-     * @param order
-     *            the order to set
-     */
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    /**
-     * @param key
-     *            the key to set
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * @param value
-     *            the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * @param label
-     *            the label to set
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
 }

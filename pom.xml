@@ -14,7 +14,6 @@
 
   <modules>
     <module>hamster-core</module>
-    <module>hamster-sampleapp</module>
     <module>hamster-core-api</module>
     <module>hamster-core-test</module>
     <module>hamster-core-web</module>

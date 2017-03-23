@@ -23,6 +23,7 @@ import org.hamster.core.api.util.difference.transformer.IdInvoker;
 import org.hamster.core.api.util.difference.transformer.defaults.DefaultPropertyInvoker;
 import org.hamster.core.api.util.difference.walker.Walker;
 import org.hamster.core.test.helper.Asserts;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.base.Function;
@@ -407,15 +408,34 @@ public class DiffCheckerTest {
     public void testSimpleCollection() {
         Dog d = new Dog("1", "1", 1);
         List<Person> p1 = Lists.newArrayList(
-                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow1", "Snow2"))
+                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow1", "Snow2"), null)
                 );
         List<Person> p2 = Lists.newArrayList(
-                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow2", "Snow1"))
+                new Person(1l, "John", 300d, true, d, Lists.newArrayList("Snow2", "Snow1"), null)
                 );
         
         DiffChecker<Long, Person> checker = new DiffChecker<Long, Person>();
         DiffResultVO<Long, Person> result = checker.check(Person.class, p1, p2);
         Asserts.assertFalse(result.hasChange());
+    }
+    
+    @Test
+    public void testChildrenDifference() {
+        Dog d1 = new Dog("1", "1", 1);
+        Dog d2 = new Dog("2", "2", 2);
+        Dog d11 = new Dog("1", "2", 3);
+        
+        List<Person> p1 = Lists.newArrayList(
+                new Person(1l, "John", 300d, true, d1, Lists.newArrayList("Snow1", "Snow2"), 
+                        Lists.newArrayList(d1, d2))
+                );
+        List<Person> p2 = Lists.newArrayList(
+                new Person(1l, "John", 300d, true, d1, Lists.newArrayList("Snow1", "Snow2"), 
+                        Lists.newArrayList(d11, d2))
+                );
+        DiffChecker<Long, Person> checker = new DiffChecker<Long, Person>();
+        DiffResultVO<Long, Person> result = checker.check(Person.class, p1, p2);
+        Assert.assertTrue(result.hasChange());
     }
 
     @Getter
@@ -428,6 +448,7 @@ public class DiffCheckerTest {
         private boolean male;
         private Dog dog;
         private List<String> alias;
+        private List<Dog> dogs;
     }
 
     @Data

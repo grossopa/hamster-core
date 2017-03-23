@@ -5,11 +5,13 @@ package org.hamster.core.dao.entity.base;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hamster.core.api.consts.StatusType;
 import org.hamster.core.api.model.base.StatusIfc;
-import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Default implementation of StatusEntity. Maps to the _status column.
@@ -18,16 +20,14 @@ import org.hibernate.validator.constraints.NotBlank;
  * @version 1.0
  */
 @MappedSuperclass
-@Where(clause = StatusEntity.WHERE_ACTIVE)
 public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
-
+    
     public static final String PROP_STATUS = "status";
     public static final String COL_STATUS = "_status";
-    public static final String WHERE_ACTIVE = "where status = 'ACTIVE'";
-
+    
     @Length(max = 20)
-    @NotBlank
-    @Column(name = COL_STATUS, length = 20, nullable = true, columnDefinition = "VARCHAR(20) DEFAULT 'ACTIVE'")
+    @Size(min = 1)
+    @Column(name = COL_STATUS, length = 20, nullable = false)
     private String status;
 
     /*
@@ -49,5 +49,13 @@ public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    @PrePersist
+    public void prePersist() {
+        if(StringUtils.isEmpty(this.status)) {
+            this.status = StatusType.ACTIVE;
+        }
+    }
+
 
 }
