@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -17,20 +18,26 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import com.google.common.collect.Lists;
 
-import lombok.Setter;
-
 /**
+ * 
+ * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
 public abstract class AbstractApplication {
-
+    
     @Autowired
-    @Setter
     private ThymeleafViewResolver thymeleafViewResolver;
+    
+    @Bean
+    public DispatcherServlet dispatcherServlet() {
+        DispatcherServlet ds = new DispatcherServlet();
+        ds.setThrowExceptionIfNoHandlerFound(true);
+        return ds;
+    }
 
     /**
-     * create an application and register default initializers
+     * creates an application and registers default initializers
      * 
      * @param clazz
      * @return
@@ -40,22 +47,43 @@ public abstract class AbstractApplication {
         application.addInitializers(new DefaultEnvironmentContextInitializer());
         return application;
     }
-
+    
     @Bean
     public ContentNegotiatingViewResolver cnViewResolver() {
+        enrichThymeleafViewResolver(thymeleafViewResolver);
+        
         ContentNegotiatingViewResolver cnResolver = new ContentNegotiatingViewResolver();
         cnResolver.setContentNegotiationManager(cnManagerFactoryBean().getObject());
-        thymeleafViewResolver.setOrder(20);
-        cnResolver.setViewResolvers(Lists.<ViewResolver> newArrayList(jsonViewResolver(), thymeleafViewResolver, internalResourceViewResolver()));
+        cnResolver.setViewResolvers(Lists.<ViewResolver>newArrayList(jsonViewResolver(), thymeleafViewResolver,
+                internalResourceViewResolver()));
         return cnResolver;
     }
 
+    /**
+     * JSON ViewResolver
+     * 
+     * @return
+     */
     protected JsonViewResolver jsonViewResolver() {
         JsonViewResolver jsonViewResolver = new JsonViewResolver();
         jsonViewResolver.setOrder(10);
         return jsonViewResolver;
     }
 
+    /**
+     * Thymeleaf template ViewResolver
+     * 
+     * @return
+     */
+    protected void enrichThymeleafViewResolver(ThymeleafViewResolver thymeleafViewResolver) {
+        thymeleafViewResolver.setOrder(20);
+    }
+
+    /**
+     * Default JSP ViewResolver
+     * 
+     * @return
+     */
     protected InternalResourceViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver irViewResolver = new InternalResourceViewResolver();
         irViewResolver.setPrefix("/WEB-INF/views");
@@ -64,6 +92,11 @@ public abstract class AbstractApplication {
         return irViewResolver;
     }
 
+    /**
+     * Uses suffix to identify the ViewResolver
+     * 
+     * @return
+     */
     protected ContentNegotiationManagerFactoryBean cnManagerFactoryBean() {
         ContentNegotiationManagerFactoryBean cnManagerFactoryBean = new ContentNegotiationManagerFactoryBean();
         cnManagerFactoryBean.setIgnoreAcceptHeader(true);

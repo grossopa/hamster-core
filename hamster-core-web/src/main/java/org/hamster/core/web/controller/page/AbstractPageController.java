@@ -14,4 +14,5 @@ public abstract class AbstractPageController extends AbstractController {
     
     @ModelAttribute("hs_application")
     public abstract String getApplication();
+    
 }
