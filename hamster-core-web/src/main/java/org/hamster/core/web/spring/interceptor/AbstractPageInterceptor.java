@@ -6,6 +6,7 @@ package org.hamster.core.web.spring.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamster.core.api.environment.Environment;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 public abstract class AbstractPageInterceptor extends AbstractWebInterceptor {
 
     public static final String CONTEXT_PATH = "context_path";
+    public static final String ENVIRONMENT = "environment";
 
     /*
      * (non-Javadoc)
@@ -38,6 +40,7 @@ public abstract class AbstractPageInterceptor extends AbstractWebInterceptor {
     protected void buildModelAndView(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
         if (mav != null) {
             mav.addObject(CONTEXT_PATH, request.getContextPath());
+            mav.addObject(ENVIRONMENT, Environment.current().toString());
         }
     }
 }
