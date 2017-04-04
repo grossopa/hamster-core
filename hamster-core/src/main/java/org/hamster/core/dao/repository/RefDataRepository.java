@@ -9,6 +9,7 @@ import org.hamster.core.api.consts.StatusType;
 import org.hamster.core.dao.entity.RefDataEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository of {@link RefDataEntity}
@@ -16,6 +17,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
+@Repository
 public interface RefDataRepository extends PagingAndSortingRepository<RefDataEntity, Long> {
 
     /**

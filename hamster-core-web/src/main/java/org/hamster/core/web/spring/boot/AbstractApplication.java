@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -29,13 +28,6 @@ public abstract class AbstractApplication {
     @Autowired
     private ThymeleafViewResolver thymeleafViewResolver;
     
-    @Bean
-    public DispatcherServlet dispatcherServlet() {
-        DispatcherServlet ds = new DispatcherServlet();
-        ds.setThrowExceptionIfNoHandlerFound(true);
-        return ds;
-    }
-
     /**
      * creates an application and registers default initializers
      * 
@@ -100,9 +92,11 @@ public abstract class AbstractApplication {
     protected ContentNegotiationManagerFactoryBean cnManagerFactoryBean() {
         ContentNegotiationManagerFactoryBean cnManagerFactoryBean = new ContentNegotiationManagerFactoryBean();
         cnManagerFactoryBean.setIgnoreAcceptHeader(true);
+        cnManagerFactoryBean.setIgnoreUnknownPathExtensions(true);
         cnManagerFactoryBean.setDefaultContentType(MediaType.TEXT_HTML);
         cnManagerFactoryBean.addMediaType("html", MediaType.TEXT_HTML);
         cnManagerFactoryBean.addMediaType("json", MediaType.APPLICATION_JSON_UTF8);
         return cnManagerFactoryBean;
     }
+    
 }
