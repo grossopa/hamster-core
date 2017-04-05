@@ -18,7 +18,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
+public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter implements InterceptorPathPatterns {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractWebInterceptor.class);
 
@@ -33,7 +33,8 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
      * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         request.setAttribute(ATTR_TIME_TRACK, System.currentTimeMillis());
         return true;
     }
@@ -45,7 +46,8 @@ public abstract class AbstractWebInterceptor extends HandlerInterceptorAdapter {
      * java.lang.Exception)
      */
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
         Long time = System.currentTimeMillis() - (Long) request.getAttribute(ATTR_TIME_TRACK);
         logAccessTime(log, time, request);
     }

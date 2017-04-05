@@ -21,7 +21,8 @@ public enum Environment {
      */
     public static void initializeEnvironment(Environment environment) {
         if (currentEnvironment != null && currentEnvironment != environment) {
-            throw new IllegalArgumentException("Environment already set to " + currentEnvironment + "Cannot be changed to " + environment);
+            throw new IllegalArgumentException(
+                    "Environment already set to " + currentEnvironment + "Cannot be changed to " + environment);
         } else if (currentEnvironment == null) {
             synchronized (Environment.class) {
                 currentEnvironment = environment;
@@ -50,5 +51,21 @@ public enum Environment {
 
     public static final boolean isProd() {
         return current() == Environment.PROD;
+    }
+
+    /**
+     * is any of the environments
+     * 
+     * @param envs
+     * @return
+     */
+    public static final boolean isOneOf(Environment... envs) {
+        for (Environment env : envs) {
+            if (current() == env) {
+                return true;
+            }
+        }
+        return false;
+
     }
 }
