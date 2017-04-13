@@ -71,6 +71,9 @@
     <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
     <maven-failsafe-plugin.version>2.19</maven-failsafe-plugin.version>
     <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
+    <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+    <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+
     <jacoco.ut.execution.data.file>${project.basedir}/../target/coverage-reports/jacoco-ut.exec</jacoco.ut.execution.data.file>
     <jacoco.it.execution.data.file>${project.basedir}/../target/coverage-reports/jacoco-it.exec</jacoco.it.execution.data.file>
     <sonar.jacoco.reportPath>${jacoco.ut.execution.data.file}</sonar.jacoco.reportPath>
@@ -256,7 +259,23 @@
     </dependencies>
   </dependencyManagement>
 
+
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>${exec-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven-resources-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
 
       <!-- code coverage -->
