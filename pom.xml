@@ -48,6 +48,7 @@
     <commons-io.version>2.4</commons-io.version>
     <commons-collections4.version>4.1</commons-collections4.version>
     <guava.version>18.0</guava.version>
+    <google-code-findbugs.jsr305.version>3.0.2</google-code-findbugs.jsr305.version>
     <lombok.version>1.16.8</lombok.version>
 
     <!-- jsp -->
@@ -201,6 +202,11 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>${google-code-findbugs.jsr305.version}</version>
       </dependency>
       <!-- google java End -->
 
