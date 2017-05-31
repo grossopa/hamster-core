@@ -26,7 +26,7 @@ public interface RefDataRepository extends PagingAndSortingRepository<RefDataEnt
      * @param status
      * @return
      */
-    public List<RefDataEntity> findByStatus(String status);
+    List<RefDataEntity> findByStatus(String status);
 
     /**
      * finds all active ref data
@@ -34,5 +34,18 @@ public interface RefDataRepository extends PagingAndSortingRepository<RefDataEnt
      * @return all active ref data
      */
     @Query("from RefDataEntity where status = '" + StatusType.ACTIVE + "'")
-    public List<RefDataEntity> findAllActive();
+    List<RefDataEntity> findAllActive();
+
+    /**
+     * @param string
+     * @return
+     */
+    List<RefDataEntity> findByKey(String string);
+
+    /**
+     * @param string
+     * @param active
+     * @return
+     */
+    List<RefDataEntity> findByKeyAndStatus(String string, String active);
 }

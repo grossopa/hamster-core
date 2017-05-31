@@ -52,7 +52,7 @@ public abstract class StatusEntity extends IdEntity implements StatusIfc<Long> {
     
     @PrePersist
     public void prePersist() {
-        if(StringUtils.isEmpty(this.status)) {
+        if(StringUtils.isBlank(this.status)) {
             this.status = StatusType.ACTIVE;
         }
     }

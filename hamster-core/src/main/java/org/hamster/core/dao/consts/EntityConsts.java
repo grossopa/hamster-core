@@ -8,6 +8,10 @@ package org.hamster.core.dao.consts;
  * @version 1.0
  */
 public class EntityConsts {
+    
+    private EntityConsts() {
+        // hidden constructor
+    }
     /**
      * defined the default database prefix
      */

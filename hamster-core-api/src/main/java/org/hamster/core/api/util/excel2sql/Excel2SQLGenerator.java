@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,7 +74,8 @@ public class Excel2SQLGenerator {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public void generate(File excelFile, File output) throws IOException, IllegalAccessException, InstantiationException {
+    public void generate(File excelFile, File output)
+            throws IOException, IllegalAccessException, InstantiationException {
         this.output = output;
         validate(output);
 
@@ -100,9 +102,9 @@ public class Excel2SQLGenerator {
 
     protected void validate(File output) {
         if (singleFile && output.isDirectory()) {
-            throw new IllegalArgumentException("output must be a file!" + output.getAbsolutePath());
+            throw new UncheckedIOException(new IOException("output must be a file!" + output.getAbsolutePath()));
         } else if (!singleFile && output.isFile()) {
-            throw new IllegalArgumentException("output must be a directory!" + output.getAbsolutePath());
+            throw new UncheckedIOException(new IOException("output must be a directory!" + output.getAbsolutePath()));
         }
     }
 
@@ -134,7 +136,8 @@ public class Excel2SQLGenerator {
             if (values.size() == 1 && isCommentLine(values.get(0))) {
                 sqls.add("-- " + values.get(0));
             } else {
-                sqls.add(MessageFormat.format(INSERT_TEMPLATE, name, StringUtils.join(fields, ", "), StringUtils.join(values, ", ")));
+                sqls.add(MessageFormat.format(INSERT_TEMPLATE, name, StringUtils.join(fields, ", "),
+                        StringUtils.join(values, ", ")));
             }
         }
         sqls.add("");
@@ -202,12 +205,13 @@ public class Excel2SQLGenerator {
 
     protected static enum CellType {
 
-        STRING(XSSFCell.CELL_TYPE_STRING), FORMULA(XSSFCell.CELL_TYPE_FORMULA), ERROR(XSSFCell.CELL_TYPE_ERROR), BOOLEAN(XSSFCell.CELL_TYPE_BOOLEAN) {
-            @Override
-            public String getValue(Cell cell) {
-                return cell.getBooleanCellValue() ? "TRUE" : "FALSE";
-            }
-        },
+        STRING(XSSFCell.CELL_TYPE_STRING), FORMULA(XSSFCell.CELL_TYPE_FORMULA), ERROR(
+                XSSFCell.CELL_TYPE_ERROR), BOOLEAN(XSSFCell.CELL_TYPE_BOOLEAN) {
+                    @Override
+                    public String getValue(Cell cell) {
+                        return cell.getBooleanCellValue() ? "TRUE" : "FALSE";
+                    }
+                },
         NUMERIC(XSSFCell.CELL_TYPE_NUMERIC) {
             @Override
             public String getValue(Cell cell) {

@@ -4,14 +4,16 @@
 package org.hamster.core.dao.repository;
 
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.hamster.core.dao.entity.PersistentLoginsEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * Default Hibernate-based token repository
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Component;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@Component
+@Repository
 public class DefaultTokenRepository implements PersistentTokenRepository {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultTokenRepository.class);
@@ -48,6 +50,7 @@ public class DefaultTokenRepository implements PersistentTokenRepository {
         PersistentLoginsEntity entity = persistentLoginsRepository.findOne(series);
         if (entity == null) {
             log.debug("Updating token for series '{}' returned no results.", series);
+            return;
         }
         entity.setToken(tokenValue);
         entity.setLastUsed(lastUsed);
@@ -63,7 +66,7 @@ public class DefaultTokenRepository implements PersistentTokenRepository {
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
         PersistentLoginsEntity entity = persistentLoginsRepository.findOne(seriesId);
         if (entity == null) {
-            log.debug("Querying token for series '{}' returned no results.");
+            log.debug("Querying token for series '{}' returned no results.", seriesId );
             return null;
         }
 
@@ -77,7 +80,12 @@ public class DefaultTokenRepository implements PersistentTokenRepository {
      */
     @Override
     public void removeUserTokens(String username) {
-        persistentLoginsRepository.delete(username);
+        List<PersistentLoginsEntity> entities = persistentLoginsRepository.findByUsername(username);
+        if (CollectionUtils.isEmpty(entities)) {
+            log.debug("Querying token for username '{}' returned no results.", username);
+            return;
+        }
+        persistentLoginsRepository.delete(entities);
     }
 
     public PersistentRememberMeToken mapPersistentRememberMeToken(PersistentLoginsEntity entity) {

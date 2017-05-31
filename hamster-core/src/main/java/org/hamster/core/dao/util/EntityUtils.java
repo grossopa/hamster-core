@@ -16,6 +16,10 @@ import org.hamster.core.api.model.base.ManageableIfc;
  * @version 1.0
  */
 public class EntityUtils {
+    
+    private EntityUtils() {
+        // hidden constructor
+    }
 
     /**
      * update modify info including createdBy, createdOn, updatedBy, updatedOn with current timestamp

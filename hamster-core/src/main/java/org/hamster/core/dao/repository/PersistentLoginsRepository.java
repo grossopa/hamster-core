@@ -3,6 +3,8 @@
  */
 package org.hamster.core.dao.repository;
 
+import java.util.List;
+
 import org.hamster.core.dao.entity.PersistentLoginsEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +17,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PersistentLoginsRepository extends PagingAndSortingRepository<PersistentLoginsEntity, String> {
+
+    /**
+     * @param username
+     * @return
+     */
+    List<PersistentLoginsEntity> findByUsername(String username);
     
 }
