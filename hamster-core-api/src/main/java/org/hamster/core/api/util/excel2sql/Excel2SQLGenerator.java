@@ -4,7 +4,6 @@
 package org.hamster.core.api.util.excel2sql;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -76,13 +76,14 @@ public class Excel2SQLGenerator {
      * @throws IOException
      * @throws IllegalAccessException
      * @throws InstantiationException
+     * @throws InvalidFormatException
      */
     public void generate(File excelFile, File output)
-            throws IOException, IllegalAccessException, InstantiationException {
+            throws IOException, IllegalAccessException, InstantiationException, InvalidFormatException {
         this.output = output;
         validate(output);
 
-        XSSFWorkbook book = new XSSFWorkbook(new FileInputStream(excelFile));
+        XSSFWorkbook book = new XSSFWorkbook(excelFile);
         int sheetNumber = book.getNumberOfSheets();
 
         Map<String, List<String>> allSqls = Maps.newLinkedHashMap();
