@@ -43,6 +43,9 @@ public class Excel2SQLGenerator {
      */
     public static final String LINE_SEP = "\r\n";
 
+    /**
+     * 
+     */
     public static final String INSERT_TEMPLATE = "INSERT INTO {0} ({1}) VALUES ({2});";
 
     public static final String COMMENT_TEMPLATE = "-- table {0} rows count {1}, Date {2}";
@@ -189,6 +192,7 @@ public class Excel2SQLGenerator {
             String ss = StringUtils.join(entry.getValue(), LINE_SEP);
             IOUtils.write(ss, target);
         }
+        IOUtils.closeQuietly(target);
     }
 
     protected static boolean isCommentLine(String firstCellStr) {

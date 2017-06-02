@@ -14,6 +14,11 @@ import org.junit.Assert;
  * @since 1.0
  */
 public class Asserts extends Assert {
+
+    private Asserts() {
+
+    }
+
     /**
      * Delegate of {@link Matchers#greaterThan(Comparable)}
      * 
