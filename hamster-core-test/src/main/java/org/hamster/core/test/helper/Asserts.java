@@ -15,8 +15,11 @@ import org.junit.Assert;
  */
 public class Asserts extends Assert {
 
+    /**
+     * @throws AssertionError
+     */
     private Asserts() {
-
+       throw new AssertionError(); 
     }
 
     /**
@@ -97,6 +100,35 @@ public class Asserts extends Assert {
      */
     public static <T extends Comparable<T>> void assertLessThanOrEqualTo(String message, T expected, T actual) {
         MatcherAssert.assertThat(message, actual, Matchers.lessThanOrEqualTo(expected));
+    }
+
+    public static <E extends Throwable> void assertThrown(Class<E> expectedThrowable, ThrowableRunner consumer) {
+        org.springframework.util.Assert.notNull(consumer, "consumer cannot be null");
+        boolean caught = false;
+        try {
+            consumer.accept();
+        } catch (Throwable throwable) {
+            assertEquals("Caught throwables classes are different with expected type.", expectedThrowable,
+                    throwable.getClass());
+            caught = true;
+        }
+        assertTrue(caught);
+    }
+
+    /**
+     * to accept some logics and throw out the expected exception
+     *
+     * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
+     * @since 1.0
+     */
+    @FunctionalInterface
+    public static interface ThrowableRunner {
+        /**
+         * to accept with 
+         * 
+         * @throws Throwable
+         */
+        void accept() throws Throwable;
     }
 
 }

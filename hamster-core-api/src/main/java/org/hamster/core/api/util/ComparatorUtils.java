@@ -10,9 +10,9 @@ package org.hamster.core.api.util;
  * @version 1.0
  */
 public final class ComparatorUtils {
-    
+
     private ComparatorUtils() {
-        
+        throw new AssertionError();
     }
 
     /**

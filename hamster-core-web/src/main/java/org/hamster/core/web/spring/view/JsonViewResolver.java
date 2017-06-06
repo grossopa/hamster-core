@@ -40,10 +40,10 @@ public class JsonViewResolver implements ViewResolver, Ordered {
         if (view != null) {
             return view;
         }
-        MappingJackson2JsonView jacksonView = new MappingJackson2JsonView();
-        jacksonView.setPrettyPrint(true);
-        jacksonView.setObjectMapper(new ObjectMapper());
-        return jacksonView;
+        view = new MappingJackson2JsonView();
+        view.setPrettyPrint(true);
+        view.setObjectMapper(new ObjectMapper());
+        return view;
     }
 
 }

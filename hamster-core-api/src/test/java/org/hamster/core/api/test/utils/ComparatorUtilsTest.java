@@ -4,6 +4,7 @@
 package org.hamster.core.api.test.utils;
 
 import org.hamster.core.api.util.ComparatorUtils;
+import org.hamster.core.test.helper.Coverage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,6 +13,11 @@ import org.junit.Test;
  * @since 1.0
  */
 public class ComparatorUtilsTest {
+    
+    @Test
+    public void testCoverage() {
+        Coverage.coverUtilConstructor(ComparatorUtils.class);
+    }
     
     @Test
     public void testObviateNull1() {

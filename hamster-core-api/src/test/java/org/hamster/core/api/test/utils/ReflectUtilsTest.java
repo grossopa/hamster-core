@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamster.core.api.util.ReflectUtils;
+import org.hamster.core.test.helper.Coverage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,6 +27,11 @@ import lombok.Setter;
 public class ReflectUtilsTest {
 
     @Test
+    public void testCoverage() {
+        Coverage.coverUtilConstructor(ReflectUtils.class);
+    }
+
+    @Test
     public void testFindByPrefixNull() {
         Map<String, Method> bar = ReflectUtils.findFieldMethodByPrefix(null, new String[] { "n" }, true, null);
         Assert.assertNull(bar);
@@ -34,61 +40,77 @@ public class ReflectUtilsTest {
     @Test
     public void testFindByPrefix() {
         Map<String, Method> bar = ReflectUtils.findFieldMethodByPrefix(Bar.class, new String[] { "getN" }, true, null);
-        assertResult(bar, new String[] { "ame", "umber" }, new String[] { "id", "division", "dummyObject", "male", "notes", "thisIsPrivate", "thisIsProtected" });
+        assertResult(bar, new String[] { "ame", "umber" },
+                new String[] { "id", "division", "dummyObject", "male", "notes", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetter() {
         Map<String, Method> bar = ReflectUtils.findGetterMethods(Bar.class);
-        assertResult(bar, new String[] { "id", "name", "number", "dummyObject", "male", "notes" }, new String[] { "division", "thisIsPrivate", "thisIsProtected" });
+        assertResult(bar, new String[] { "id", "name", "number", "dummyObject", "male", "notes" },
+                new String[] { "division", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetterExclude() {
-        Map<String, Method> bar = ReflectUtils.findGetterMethods(Bar.class, true, new String[] { "dummyObject", "male" });
-        assertResult(bar, new String[] { "id", "name", "number", "notes" }, new String[] { "division", "dummyObject", "male", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Method> bar = ReflectUtils.findGetterMethods(Bar.class, true,
+                new String[] { "dummyObject", "male" });
+        assertResult(bar, new String[] { "id", "name", "number", "notes" },
+                new String[] { "division", "dummyObject", "male", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetterInclude() {
-        Map<String, Method> bar = ReflectUtils.findGetterMethods(Bar.class, false, new String[] { "dummyObject", "male", "division" });
-        assertResult(bar, new String[] { "dummyObject", "male" }, new String[] { "id", "name", "number", "notes", "division", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Method> bar = ReflectUtils.findGetterMethods(Bar.class, false,
+                new String[] { "dummyObject", "male", "division" });
+        assertResult(bar, new String[] { "dummyObject", "male" },
+                new String[] { "id", "name", "number", "notes", "division", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindSetter() {
         Map<String, Method> bar = ReflectUtils.findSetterMethods(Bar.class);
-        assertResult(bar, new String[] { "id", "name", "number", "dummyObject", "male", "division" }, new String[] { "notes", "thisIsPrivate", "thisIsProtected" });
+        assertResult(bar, new String[] { "id", "name", "number", "dummyObject", "male", "division" },
+                new String[] { "notes", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindSetterExclude() {
-        Map<String, Method> bar = ReflectUtils.findSetterMethods(Bar.class, true, new String[] { "dummyObject", "male", "division" });
-        assertResult(bar, new String[] { "id", "name", "number" }, new String[] { "notes", "dummyObject", "male", "division", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Method> bar = ReflectUtils.findSetterMethods(Bar.class, true,
+                new String[] { "dummyObject", "male", "division" });
+        assertResult(bar, new String[] { "id", "name", "number" },
+                new String[] { "notes", "dummyObject", "male", "division", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindSetterInclude() {
-        Map<String, Method> bar = ReflectUtils.findSetterMethods(Bar.class, false, new String[] { "dummyObject", "notes", "division", "thisIsPrivate", "thisIsProtected" });
-        assertResult(bar, new String[] { "dummyObject", "division" }, new String[] { "id", "name", "number", "notes", "male", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Method> bar = ReflectUtils.findSetterMethods(Bar.class, false,
+                new String[] { "dummyObject", "notes", "division", "thisIsPrivate", "thisIsProtected" });
+        assertResult(bar, new String[] { "dummyObject", "division" },
+                new String[] { "id", "name", "number", "notes", "male", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetterSetterMethods1() {
         Map<String, Pair<Method, Method>> bar = ReflectUtils.findGetterSetterMethods(Bar.class);
-        assertResult(bar, new String[] { "id", "name", }, new String[] { "division", "notes", "thisIsPrivate", "thisIsProtected" });
+        assertResult(bar, new String[] { "id", "name", },
+                new String[] { "division", "notes", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetterSetterMethods2() {
-        Map<String, Pair<Method, Method>> bar = ReflectUtils.findGetterSetterMethods(Bar.class, false, new String[] { "id", "name", "division" });
-        assertResult(bar, new String[] { "id", "name" }, new String[] { "number", "dummyObject", "male", "division", "notes", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Pair<Method, Method>> bar = ReflectUtils.findGetterSetterMethods(Bar.class, false,
+                new String[] { "id", "name", "division" });
+        assertResult(bar, new String[] { "id", "name" }, new String[] { "number", "dummyObject", "male", "division",
+                "notes", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
     public void testFindGetterSetterMethods3() {
-        Map<String, Pair<Method, Method>> bar = ReflectUtils.findGetterSetterMethods(Bar.class, true, new String[] { "id", "name", "division" });
-        assertResult(bar, new String[] { "number", "dummyObject", "male" }, new String[] { "id", "name", "division", "notes", "thisIsPrivate", "thisIsProtected" });
+        Map<String, Pair<Method, Method>> bar = ReflectUtils.findGetterSetterMethods(Bar.class, true,
+                new String[] { "id", "name", "division" });
+        assertResult(bar, new String[] { "number", "dummyObject", "male" },
+                new String[] { "id", "name", "division", "notes", "thisIsPrivate", "thisIsProtected" });
     }
 
     @Test
@@ -121,7 +143,7 @@ public class ReflectUtilsTest {
         Map<Long, Bar> result = ReflectUtils.toMap(null, Bar.class, "id");
         Assert.assertTrue(result.isEmpty());
     }
-    
+
     @Test
     public void testToMap3() throws IllegalAccessException, InvocationTargetException {
         List<Bar> coll = Lists.newArrayList();

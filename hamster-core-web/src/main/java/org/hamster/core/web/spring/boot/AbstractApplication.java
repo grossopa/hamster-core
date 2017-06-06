@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 public abstract class AbstractApplication {
     
     @Autowired
-    private ThymeleafViewResolver thymeleafViewResolver;
+    protected ThymeleafViewResolver thymeleafViewResolver;
     
     /**
      * creates an application and registers default initializers
@@ -56,7 +56,7 @@ public abstract class AbstractApplication {
      * 
      * @return
      */
-    protected JsonViewResolver jsonViewResolver() {
+    public JsonViewResolver jsonViewResolver() {
         JsonViewResolver jsonViewResolver = new JsonViewResolver();
         jsonViewResolver.setOrder(10);
         return jsonViewResolver;
@@ -76,7 +76,7 @@ public abstract class AbstractApplication {
      * 
      * @return
      */
-    protected InternalResourceViewResolver internalResourceViewResolver() {
+    public InternalResourceViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver irViewResolver = new InternalResourceViewResolver();
         irViewResolver.setPrefix("/WEB-INF/views");
         irViewResolver.setSuffix(".jsp");
@@ -89,7 +89,7 @@ public abstract class AbstractApplication {
      * 
      * @return
      */
-    protected ContentNegotiationManagerFactoryBean cnManagerFactoryBean() {
+    public ContentNegotiationManagerFactoryBean cnManagerFactoryBean() {
         ContentNegotiationManagerFactoryBean cnManagerFactoryBean = new ContentNegotiationManagerFactoryBean();
         cnManagerFactoryBean.setIgnoreAcceptHeader(true);
         cnManagerFactoryBean.setIgnoreUnknownPathExtensions(true);

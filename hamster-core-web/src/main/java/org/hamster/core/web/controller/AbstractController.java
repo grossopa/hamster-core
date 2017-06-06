@@ -15,6 +15,8 @@ import org.springframework.core.OrderComparator;
 
 import com.google.common.collect.Lists;
 
+import lombok.Setter;
+
 /**
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
@@ -25,6 +27,7 @@ public abstract class AbstractController {
      * optional exception converters
      */
     @Autowired(required = false)
+    @Setter
     protected List<ExceptionConverter> exceptionConverters;
 
     /**
@@ -58,5 +61,7 @@ public abstract class AbstractController {
         DefaultExceptionConverter converter = new DefaultExceptionConverter();
         return converter.handle(ex);
     }
+    
+    
 
 }

@@ -32,7 +32,11 @@ import com.google.common.collect.Sets;
  * @version May 13, 2014 5:40:47 PM
  */
 public final class ReflectUtils {
-    
+
+    private ReflectUtils() {
+        throw new AssertionError();
+    }
+
     private static final Logger log = LoggerFactory.getLogger(ReflectUtils.class);
 
     public static final String GETTER_GET = "get";
@@ -48,7 +52,7 @@ public final class ReflectUtils {
     public static Map<String, Method> findGetterMethods(Class<?> clazz) {
         return findGetterMethods(clazz, true, null);
     }
-    
+
     /**
      * search getter methods with include/exclude
      * 
@@ -60,9 +64,9 @@ public final class ReflectUtils {
      * @return
      */
     public static Map<String, Method> findGetterMethods(Class<?> clazz, boolean exclude, String[] properties) {
-        return findFieldMethodByPrefix(clazz, new String[]{GETTER_GET, GETTER_IS}, exclude, properties);
+        return findFieldMethodByPrefix(clazz, new String[] { GETTER_GET, GETTER_IS }, exclude, properties);
     }
-    
+
     /**
      * search all setter methods of a class
      * 
@@ -72,21 +76,21 @@ public final class ReflectUtils {
     public static Map<String, Method> findSetterMethods(Class<?> clazz) {
         return findSetterMethods(clazz, true, null);
     }
-    
+
     /**
      * search setter methods with include/exclude
      * 
      * @param clazz
      * @param exclude
      *            exclude/include properties
-     * @param properties 
+     * @param properties
      *            properties to be excluded/included
      * @return
      */
     public static Map<String, Method> findSetterMethods(Class<?> clazz, boolean exclude, String[] properties) {
-        return findFieldMethodByPrefix(clazz, new String[]{SETTER_SET}, exclude, properties);
+        return findFieldMethodByPrefix(clazz, new String[] { SETTER_SET }, exclude, properties);
     }
-    
+
     /**
      * search all getter/setter pairs of a class
      * 
@@ -96,16 +100,19 @@ public final class ReflectUtils {
     public static Map<String, Pair<Method, Method>> findGetterSetterMethods(Class<?> clazz) {
         return findGetterSetterMethods(clazz, true, null);
     }
-    
+
     /**
      * search getter/setter pairs with include/exclude
      * 
      * @param clazz
-     * @param exclude exclude/include properties
-     * @param properties properties to be excluded/included
+     * @param exclude
+     *            exclude/include properties
+     * @param properties
+     *            properties to be excluded/included
      * @return
      */
-    public static Map<String, Pair<Method, Method>> findGetterSetterMethods(Class<?> clazz, boolean exclude, String[] properties) {
+    public static Map<String, Pair<Method, Method>> findGetterSetterMethods(Class<?> clazz, boolean exclude,
+            String[] properties) {
         if (clazz == null) {
             return null;
         }
@@ -121,13 +128,13 @@ public final class ReflectUtils {
         }
         return result;
     }
-    
+
     /**
      * find all methods by name
      * 
      * @param clazz
      * @param methodName
-     * @return 
+     * @return
      */
     public static Set<Method> findMethodsByName(final Class<?> clazz, final String methodName) {
         Set<Method> result = Sets.newHashSet();
@@ -138,7 +145,7 @@ public final class ReflectUtils {
         }
         return result;
     }
-    
+
     /**
      * find the executable method by params
      * 
@@ -153,21 +160,21 @@ public final class ReflectUtils {
             }
         }
         return null;
-        
+
     }
-    
+
     /**
      * determine if method is executable for input params
      * 
      * @param method
      * @param params
-     * @return 
+     * @return
      */
     private static boolean isExecutableMethod(Method method, Object... params) {
         if (method.getParameterTypes().length != params.length) {
             return false;
         }
-        
+
         // evaluate params
         for (int i = 0; i < params.length; i++) {
             Object param = params[i];
@@ -185,7 +192,6 @@ public final class ReflectUtils {
         }
         return true;
     }
-    
 
     /**
      * find Field Method by prefix
@@ -196,7 +202,8 @@ public final class ReflectUtils {
      * @param properties
      * @return key-value pair for propertyName-Method
      */
-    public static Map<String, Method> findFieldMethodByPrefix(final Class<?> clazz, final String[] prefixList, final boolean exclude, final String[] properties) {
+    public static Map<String, Method> findFieldMethodByPrefix(final Class<?> clazz, final String[] prefixList,
+            final boolean exclude, final String[] properties) {
         if (clazz == null) {
             return null;
         }
@@ -206,6 +213,7 @@ public final class ReflectUtils {
 
             /*
              * (non-Javadoc)
+             * 
              * @see org.springframework.util.ReflectionUtils.MethodCallback#doWith(java.lang.reflect.Method)
              */
             @Override
@@ -228,7 +236,7 @@ public final class ReflectUtils {
         }, new DefaultMethodFilter());
         return result;
     }
-    
+
     /**
      * DefaultMethodFilter to filter non-public methods and getClass
      * 
@@ -236,7 +244,7 @@ public final class ReflectUtils {
      * @since 1.0
      */
     private static class DefaultMethodFilter implements MethodFilter {
-        
+
         /*
          * (non-Javadoc)
          * 
@@ -247,7 +255,7 @@ public final class ReflectUtils {
             return Modifier.isPublic(method.getModifiers()) && !"getClass".equals(method.getName());
         }
     }
-    
+
     /**
      * convert a collection to map
      * 
@@ -258,8 +266,9 @@ public final class ReflectUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <K, T> Map<K, T> toMap(Iterable<T> coll, Class<T> clazz, String idProperty) throws IllegalAccessException, InvocationTargetException {
-        Map<String, Method> methods = findGetterMethods(clazz, false, new String[]{idProperty});
+    public static <K, T> Map<K, T> toMap(Iterable<T> coll, Class<T> clazz, String idProperty)
+            throws IllegalAccessException, InvocationTargetException {
+        Map<String, Method> methods = findGetterMethods(clazz, false, new String[] { idProperty });
         return toMap(coll, methods.get(idProperty));
     }
 
@@ -274,7 +283,8 @@ public final class ReflectUtils {
      * @throws InvocationTargetException
      */
     @SuppressWarnings("unchecked")
-    public static <K, T> Map<K, T> toMap(Iterable<T> coll, Method idGetterMethod) throws IllegalAccessException, InvocationTargetException {
+    public static <K, T> Map<K, T> toMap(Iterable<T> coll, Method idGetterMethod)
+            throws IllegalAccessException, InvocationTargetException {
         Map<K, T> result = Maps.newHashMap();
         if (coll == null || Iterables.isEmpty(coll)) {
             return result;
@@ -314,7 +324,7 @@ public final class ReflectUtils {
             }
         }
     }
-    
+
     /**
      * try to invoke a method by method name, return null for any exceptions
      * 
@@ -333,7 +343,7 @@ public final class ReflectUtils {
             return null;
         }
     }
-    
+
     /**
      * invoke a method
      * 
@@ -345,10 +355,11 @@ public final class ReflectUtils {
      * @throws InvocationTargetException
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(Method method, Object object, Object... args) throws IllegalAccessException, InvocationTargetException {
+    public static <T> T invoke(Method method, Object object, Object... args)
+            throws IllegalAccessException, InvocationTargetException {
         return (T) method.invoke(object, args);
     }
-    
+
     /**
      * invoke a method by method name
      * 
@@ -359,13 +370,15 @@ public final class ReflectUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T> T invoke(String methodName, Object object, Object... args) throws IllegalAccessException, InvocationTargetException {
+    public static <T> T invoke(String methodName, Object object, Object... args)
+            throws IllegalAccessException, InvocationTargetException {
         Assert.notNull(methodName, "params methodName is null");
         Assert.notNull(object, "parameter object is null");
         Set<Method> methods = findMethodsByName(object.getClass(), methodName);
         Method method = findExecutableMethod(methods, args);
         if (method == null) {
-            throw new NullPointerException(MessageFormat.format("Cannot find method {0} of Class {1}.", methodName, object.getClass().getName()));
+            throw new NullPointerException(MessageFormat.format("Cannot find method {0} of Class {1}.", methodName,
+                    object.getClass().getName()));
         }
         return invoke(method, object, args);
     }

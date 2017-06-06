@@ -9,6 +9,10 @@ package org.hamster.core.api.consts;
  */
 public class StatusType {
     
+    private StatusType() {
+        throw new AssertionError();
+    }
+    
     /**
      * the record is in normal state
      */

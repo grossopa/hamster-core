@@ -36,6 +36,6 @@ public abstract class AbstractDaoSpringTest {
     }
 
     protected abstract void initCommonData(TestEntityManager entityManager);
-
-
 }
+
+

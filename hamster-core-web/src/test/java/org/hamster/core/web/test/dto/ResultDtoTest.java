@@ -3,6 +3,7 @@
  */
 package org.hamster.core.web.test.dto;
 
+import org.hamster.core.web.controller.dto.ErrorDto;
 import org.hamster.core.web.controller.dto.ResultDto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,6 +26,16 @@ public class ResultDtoTest {
         ResultDto<Object> dto = ResultDto.of("some message", o);
         Assert.assertEquals("some message", dto.getMessage());
         Assert.assertEquals(o, dto.getData());
+    }
+    
+    @Test
+    public void testOfEmpty() {
+        Assert.assertNotNull(ResultDto.of());
+    }
+
+    @Test
+    public void testOfEmptyCode() {
+        Assert.assertNotNull(ResultDto.of(new ErrorDto<Object>()));
     }
     
 }
