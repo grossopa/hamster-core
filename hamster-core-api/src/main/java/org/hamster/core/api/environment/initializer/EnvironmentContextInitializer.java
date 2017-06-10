@@ -14,8 +14,9 @@ import org.springframework.util.Assert;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public abstract class EnvironmentContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-    
+public abstract class EnvironmentContextInitializer
+        implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
     public static final String ENVIRONMENT = "hm.environment";
 
     /*
@@ -26,18 +27,18 @@ public abstract class EnvironmentContextInitializer implements ApplicationContex
      */
     @Override
     public void initialize(ConfigurableApplicationContext context) {
-        Environment env = getBuilder().build();
-        
+        String env = getBuilder().build();
+
         Assert.notNull(env, "Environment variable from EnvironmentBuilder must be non-null!");
-        
-        Environment.initializeEnvironment(env);
-        
+
+        Environment.global().initializeEnvironment(env);
+
         System.setProperty(ENVIRONMENT, env.toString());
         System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, env.toString());
         System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, env.toString());
-        
+
     }
-    
+
     abstract public EnvironmentBuilder getBuilder();
 
 }

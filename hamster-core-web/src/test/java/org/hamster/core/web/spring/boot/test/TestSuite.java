@@ -1,4 +1,4 @@
-package org.hamster.core.web.spring.interceptor.test;
+package org.hamster.core.web.spring.boot.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -6,6 +6,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
 
-{ AbstractPageInterceptorTest.class, AbstractWebInterceptorTest.class })
+{ WebConfigurationTest.class, AbstractApplicationTest.class })
 public class TestSuite { // nothing
 }

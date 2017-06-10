@@ -26,7 +26,7 @@ public class DefaultEnvironmentBuilder implements EnvironmentBuilder {
      * @see org.hamster.core.api.environment.builder.EnvironmentBuilder#build()
      */
     @Override
-    public Environment build() {
+    public String build() {
         String source = "System Environment Variable";
 
         String env = System.getenv(ENVIRONMENT_VARIABLE);
@@ -37,12 +37,14 @@ public class DefaultEnvironmentBuilder implements EnvironmentBuilder {
         }
 
         if (StringUtils.isEmpty(env)) {
-            log.warn("No Environment Variable nor System Property found for {}, defaulted to be UNKNOWN.", ENVIRONMENT_VARIABLE);
-            source = "";
+            log.warn("No Environment Variable nor System Property found for {}, defaulted to be UNKNOWN.",
+                    ENVIRONMENT_VARIABLE);
             return Environment.UNKNOWN;
         }
 
-        log.info("Current environment : {}, source : {}", env.toUpperCase(), source);
-        return Environment.valueOf(env.toUpperCase());
+        env = env.toUpperCase();
+
+        log.info("Current environment : {}, source : {}", env, source);
+        return env;
     }
 }

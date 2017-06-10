@@ -21,7 +21,7 @@ public class AbstractPageInterceptorTest {
 
     @After
     public void after() {
-        Environment.cleanup();
+        Environment.global().cleanup();
     }
 
     private AbstractPageInterceptor createTestSubject() {
@@ -61,7 +61,7 @@ public class AbstractPageInterceptorTest {
     @Test
     public void testPostHandle2() throws Exception {
 
-        Environment.initializeEnvironment(Environment.UNKNOWN);
+        Environment.global().initializeEnvironment(Environment.UNKNOWN);
         AbstractPageInterceptor testSubject;
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = null;

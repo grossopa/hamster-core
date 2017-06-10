@@ -3,29 +3,47 @@
  */
 package org.hamster.core.api.environment;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * Defines all possible environments
+ * All pre-defined environments
  * 
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @version 1.0
  */
-public enum Environment {
-    UNKNOWN, LOCAL, DEV, UAT, PROD;
-
-    private static Environment currentEnvironment;
-
+public class Environment {
+    public static final String UNKNOWN = "UNKNOWN";
+    public static final String LOCAL = "LOCAL";
+    public static final String DEV = "DEV";
+    public static final String INT = "INT";
+    public static final String UAT = "UAT";
+    public static final String PROD = "PROD";
+    
+    private static final Environment global = new Environment();
+    
+    private String currentEnvironment;
+    
+    /**
+     * get global environment instance
+     * 
+     * @return
+     */
+    public static final Environment global() {
+        return global;
+    }
+    
     /**
      * initializes environment
      * 
      * @param environment
      */
-    public static void initializeEnvironment(Environment environment) {
-        if (currentEnvironment != null && currentEnvironment != environment) {
+    public void initializeEnvironment(String environment) {
+        if (StringUtils.isNotBlank(currentEnvironment)) {
             throw new IllegalArgumentException(
                     "Environment already set to " + currentEnvironment + "Cannot be changed to " + environment);
         } else if (currentEnvironment == null) {
-            synchronized (Environment.class) {
-                currentEnvironment = environment;
+            synchronized (this) {
+                currentEnvironment = StringUtils.defaultIfBlank(environment, UNKNOWN).toUpperCase();
             }
         }
     }
@@ -33,7 +51,7 @@ public enum Environment {
     /**
      * Clean up current environment, only for testing propose
      */
-    public static void cleanup() {
+    public void cleanup() {
         currentEnvironment = null;
     }
 
@@ -42,15 +60,15 @@ public enum Environment {
      * 
      * @return
      */
-    public static final Environment current() {
-        if (currentEnvironment == null) {
+    public String current() {
+        if (StringUtils.isBlank(currentEnvironment)) {
             throw new NullPointerException("Environment not set");
         }
         return currentEnvironment;
     }
 
-    public static final boolean isProd() {
-        return current() == Environment.PROD;
+    public boolean isProd() {
+        return Environment.PROD.equals(current());
     }
 
     /**
@@ -59,9 +77,9 @@ public enum Environment {
      * @param envs
      * @return
      */
-    public static final boolean isOneOf(Environment... envs) {
-        for (Environment env : envs) {
-            if (current() == env) {
+    public boolean isOneOf(String... envs) {
+        for (String env : envs) {
+            if (StringUtils.equalsIgnoreCase(env, currentEnvironment)) {
                 return true;
             }
         }

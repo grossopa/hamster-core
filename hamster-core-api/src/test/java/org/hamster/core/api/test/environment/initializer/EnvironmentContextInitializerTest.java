@@ -22,7 +22,7 @@ import org.springframework.core.env.AbstractEnvironment;
 public class EnvironmentContextInitializerTest {
     @Before
     public void before() {
-        Environment.cleanup();
+        Environment.global().cleanup();
     }
 
     @After
@@ -30,7 +30,7 @@ public class EnvironmentContextInitializerTest {
         System.clearProperty(DefaultEnvironmentBuilder.ENVIRONMENT_VARIABLE);
         System.clearProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME);
         System.clearProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
-        Environment.cleanup();
+        Environment.global().cleanup();
     }
 
     @Test

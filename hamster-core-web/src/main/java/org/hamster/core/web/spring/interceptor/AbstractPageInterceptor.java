@@ -21,13 +21,15 @@ public abstract class AbstractPageInterceptor extends AbstractWebInterceptor {
     /*
      * (non-Javadoc)
      * 
-     * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#postHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object,
+     * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#postHandle(javax.servlet.http.
+     * HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object,
      * org.springframework.web.servlet.ModelAndView)
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            ModelAndView modelAndView) throws Exception {
         super.postHandle(request, response, handler, modelAndView);
-        buildModelAndView(request, response, modelAndView);
+        buildModelAndView(request, modelAndView);
     }
 
     /**
@@ -37,10 +39,10 @@ public abstract class AbstractPageInterceptor extends AbstractWebInterceptor {
      * @param response
      * @param mav
      */
-    protected void buildModelAndView(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+    protected void buildModelAndView(HttpServletRequest request, ModelAndView mav) {
         if (mav != null) {
             mav.addObject(CONTEXT_PATH, request.getContextPath());
-            mav.addObject(ENVIRONMENT, Environment.current().toString());
+            mav.addObject(ENVIRONMENT, Environment.global().current());
         }
     }
 }

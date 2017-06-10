@@ -28,7 +28,7 @@ public class LocalEnvironmentContextInitializer extends EnvironmentContextInitia
         return new EnvironmentBuilder() {
 
             @Override
-            public Environment build() {
+            public String build() {
                 log.info("Current environment : LOCAL");
                 return Environment.LOCAL;
             }

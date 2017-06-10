@@ -25,7 +25,7 @@ public class UnknownEnvironmentContextInitializer extends EnvironmentContextInit
         return new EnvironmentBuilder() {
 
             @Override
-            public Environment build() {
+            public String build() {
                 log.info("Current environment : UNKNOWN");
                 return Environment.UNKNOWN;
             }

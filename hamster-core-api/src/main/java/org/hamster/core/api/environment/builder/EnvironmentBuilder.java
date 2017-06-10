@@ -3,8 +3,6 @@
  */
 package org.hamster.core.api.environment.builder;
 
-import org.hamster.core.api.environment.Environment;
-
 /**
  * Build the environment
  * 
@@ -18,5 +16,5 @@ public interface EnvironmentBuilder {
      * 
      * @return the built environment, must be non-null
      */
-    Environment build();
+    String build();
 }

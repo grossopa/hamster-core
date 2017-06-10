@@ -1,6 +1,11 @@
 package org.hamster.core.web.spring.interceptor.test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -10,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.hamster.core.test.helper.Asserts;
 import org.hamster.core.web.spring.interceptor.AbstractWebInterceptor;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 public class AbstractWebInterceptorTest {
 

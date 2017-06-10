@@ -6,7 +6,7 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>hamster-core-web</artifactId>
-  <name>Hamster Web Utilities</name>
+  <name>Hamster Core Web Module</name>
 
   <dependencies>
     <!-- project -->
@@ -39,11 +39,6 @@
     <dependency>
       <groupId>com.github.mxab.thymeleaf.extras</groupId>
       <artifactId>thymeleaf-extras-data-attribute</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jsp-api</artifactId>
     </dependency>
 
     <dependency>
